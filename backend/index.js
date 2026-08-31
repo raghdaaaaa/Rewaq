@@ -1,6 +1,6 @@
 // cmd commands used:
 //     1. npm init -y
-//     2. npm i mongoose express dotenv jsonwebtoken bcrypt
+//     2. npm i mongoose express dotenv multer jsonwebtoken bcrypt
 //     3. npm install-scripts approve bcrypt@6.0.0
 
 require('dotenv').config({
@@ -14,10 +14,12 @@ app.use(express.json());
 // ----------------------------------- routes:
 const bookRoute = require('./routes/book_route');
 const userRoute = require('./routes/user_route');
+const authRoute = require('./routes/auth_route');
 
 // ----------------------------------- middlewares: 
 app.use('/books', bookRoute);
 app.use('/users', userRoute);
+app.use('/auth', authRoute);
 const errorHandler = require('./middlewares/error_handler');
 app.use(errorHandler);
 

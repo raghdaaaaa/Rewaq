@@ -13,10 +13,10 @@ const addNewBook = async (req, res) => {
             msg: "Book already exists"
         });
     }
-
+    
     const book = new Book(content);
-
     await book.save();
+    
     res.status(201).json({
         msg: `Added (${book.title})`
     });
@@ -66,11 +66,25 @@ const deleteAllBooks = async (req, res) => {
     });
 };
 
+const searchBooks = async (req, res, next) => {
+    const search = req.query.search;
+
+    const books = await Book.find({
+        $or: [
+            { title: { $regex: search, $options: 'i' } },
+            { author: { $regex: search, $options: 'i' } }
+        ]
+    });
+
+    res.status(200).json(books);
+};
+
 module.exports = {
     addNewBook,
     getAllBooks,
     getBookById,
     updateBook,
     deleteBook,
-    deleteAllBooks
+    deleteAllBooks,
+    searchBooks
 };

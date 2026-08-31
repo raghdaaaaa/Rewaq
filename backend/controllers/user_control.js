@@ -1,5 +1,6 @@
 const User = require('../models/user_model');
 const bcrypt = require('bcrypt');
+
 const addUser = async (req, res) => {
     const newUser = req.body;
     newUser.password = await bcrypt.hash(newUser.password, 10);
@@ -24,7 +25,7 @@ const getUserById = async (req, res) => {
     res.status(200).json(user);
 };
 
-const updateUserByAdmin = async (req, res, next) => {
+const adminUpdateUser = async (req, res, next) => {
     const update = { ...req.body };
 
     if (update.password) {
@@ -41,7 +42,7 @@ const updateUserByAdmin = async (req, res, next) => {
     res.status(200).json(user);
 };
 
-const updateUserByOwn = async (req, res, next) => {
+const userUpdateOwn = async (req, res, next) => {
     const update = {
         name: req.body.name,
         email: req.body.email,
@@ -52,9 +53,9 @@ const updateUserByOwn = async (req, res, next) => {
         update.password = await bcrypt.hash(req.body.password, 10);
     }
 
-    const user = await User.findByIdAndUpdate(req.user._id, update,
+    const user = await User.findByIdAndUpdate(req.user.id, update,
         {
-            new: true,
+            returnDocument: 'after',
             runValidators: true
         }
     ).select('-password');
@@ -85,12 +86,38 @@ const deleteAllUsers = async (req, res) => {
     });
 };
 
+const getOwnUser = async (req, res) => {
+    const id = req.user.id;
+    let user = await User.findById(id);
+    user = user.toObject();
+    delete user.password;
+
+    res.status(200).json(user);
+};
+
+const userDeleteOwn = async (req, res) => {
+    const id = req.user.id;
+    const user = await User.findByIdAndDelete(id);
+
+    if (!user) {
+        return res.status(404).json({
+            msg: "User does not exist"
+        });
+    }
+
+    res.status(200).json({
+        msg: "User deleted"
+    });
+};
+
 module.exports = {
     addUser,
     getAllUsers,
     getUserById,
-    updateUserByAdmin,
-    updateUserByOwn,
+    adminUpdateUser,
+    userUpdateOwn,
     deleteUser,
-    deleteAllUsers
+    deleteAllUsers,
+    getOwnUser,
+    userDeleteOwn
 };
