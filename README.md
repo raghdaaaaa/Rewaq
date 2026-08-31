@@ -7,25 +7,7 @@
     - authorize_admin.js
     - authorize_user.js
 
-- [x] update user's routs to:
-
-    GET    /users
-
-    GET    /users/me
-
-    PATCH  /users/me
-    
-    DELETE /users/me
-
-    GET    /users/me/books
-
-    GET    /users/:id
-
-    PATCH  /users/:id
-
-    DELETE /users/:id
-
-    DELETE /users
+- [x] update user's routs.
 
 - [x] add book searching based on both title and author.
 
