@@ -1,7 +1,9 @@
 const Book = require('../models/book_model');
 
 const addNewBook = async (req, res) => {
-    const content = req.body;
+    const content = {
+        ...req.body
+    };
 
     const exists = await Book.findOne({
         title: content.title,
@@ -12,6 +14,13 @@ const addNewBook = async (req, res) => {
         return res.status(409).json({
             msg: "Book already exists"
         });
+    }
+
+    if (req.file) {
+        content.coverImage = {
+            data: req.file.buffer,
+            contentType: req.file.mimetype
+        };
     }
     
     const book = new Book(content);
@@ -34,7 +43,17 @@ const getBookById = async (req, res) => {
 
 const updateBook = async (req, res) => {
     const id = req.params.id;
-    const update = req.body;
+    const update = {
+        ...req.body
+    };
+
+    if (req.file) {
+        update.coverImage = {
+            data: req.file.buffer,
+            contentType: req.file.mimetype
+        };
+    }
+
     const book = await Book.findByIdAndUpdate(id, update, {
         returnDocument: 'after',
         runValidators: true
@@ -79,6 +98,19 @@ const searchBooks = async (req, res, next) => {
     res.status(200).json(books);
 };
 
+const getBookCover = async (req, res) => {
+    const book = req.book;
+
+    if (!book.coverImage || !book.coverImage.data) {
+        return res.status(404).json({
+            msg: "Book cover does not exist"
+        });
+    }
+
+    res.contentType(book.coverImage.contentType);
+    res.send(book.coverImage.data);
+};
+
 module.exports = {
     addNewBook,
     getAllBooks,
@@ -86,5 +118,6 @@ module.exports = {
     updateBook,
     deleteBook,
     deleteAllBooks,
-    searchBooks
+    searchBooks,
+    getBookCover
 };

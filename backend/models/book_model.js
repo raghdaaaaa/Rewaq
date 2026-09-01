@@ -19,6 +19,11 @@ const booksSchema = new mongoose.Schema({
     pages: {
         type: Number,
         min: [1, "Pages must be at least equal to 1"]
+    },
+
+    coverImage: {
+        data: Buffer,
+        contentType: String
     }
 });
 
