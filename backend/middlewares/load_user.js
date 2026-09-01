@@ -1,27 +1,21 @@
-const Book = require('../models/book_model');
+const User = require('../models/user_model');
 
-const loadBook = async (req, res, next) => {
-
+const loadUser = async (req, res, next) => {
     try {
+        const user = await User.findById(req.params.id);
 
-        const book = await Book.findById(
-            req.params.id
-        );
-
-        if (!book) {
+        if (!user) {
             return res.status(404).json({
-                msg: "Book does not exist"
+                msg: "User does not exist"
             });
         }
 
-        req.book = book;
-
+        // req.user = user;     // not needed after the authenticate middleware
         next();
-
-    } catch (error) {
+    }
+    catch (error) {
         next(error);
     }
-
 };
 
-module.exports = loadBook;
+module.exports = loadUser;

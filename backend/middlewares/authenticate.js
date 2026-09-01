@@ -1,46 +1,40 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/user_model');
 
-const authenticate = (req, res, next) => {
+const authenticator = async (req, res, next) => {
+    try {
+        const token = req.headers.auth;
 
-   try {
+        if (!token) {
+            return res.status(400).json({
+                msg: "Token not found"
+            });
+        }
+    
+        const payload = jwt.verify(token, process.env.secret_key);
+        const user = await User.findById(payload.id);
 
-      const authHeader = req.headers.authorization;
+        if (!user) {
+            return res.status(401).json({
+                msg: "User does not exist"
+            });
+        }
+        
+        // console.log("DB:", user.tokenVersion, typeof user.tokenVersion);
+        // console.log("JWT:", payload.tokenVersion, typeof payload.tokenVersion);
 
-      if (!authHeader) {
-         return res.status(401).json({
-            msg: "Authentication token is required"
-         });
-      }
+        if (user.tokenVersion !== payload.tokenVersion) {
+            return res.status(401).json({
+                msg: "Token is no longer valid, please log-in"
+            });
+        }
 
-      const parts = authHeader.split(' ');
-
-      if (
-         parts.length !== 2 ||
-         parts[0] !== 'Bearer'
-      ) {
-         return res.status(401).json({
-            msg: "Invalid authentication format"
-         });
-      }
-
-      const token = parts[1];
-
-      const payload = jwt.verify(
-         token,
-         process.env.secret_key
-      );
-
-      req.user = payload;
-
-      next();
-
-   } catch (error) {
-
-      return res.status(401).json({
-         msg: "Invalid or expired token"
-      });
-
-   }
+        req.user = payload;
+        next();
+    }
+    catch (error) {
+        next(error);
+    }
 };
 
-module.exports = authenticate;
+module.exports = authenticator;

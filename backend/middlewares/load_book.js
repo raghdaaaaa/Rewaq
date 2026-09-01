@@ -1,9 +1,21 @@
-module.exports = (error, req, res, next) => {
+const Book = require('../models/book_model');
 
-    res.status(error.status || 500).json({
-        msg: "Error middleware",
-        error_name: error.name,
-        error_message: error.message
-    });
+const loadBook = async (req, res, next) => {
+    try {
+        const book = await Book.findById(req.params.id);
 
+        if (!book) {
+            return res.status(404).json({
+                msg: "Book does not exist"
+            });
+        }
+
+        req.book = book;
+        next();
+    }
+    catch (error) {
+        next(error);
+    }
 };
+
+module.exports = loadBook;

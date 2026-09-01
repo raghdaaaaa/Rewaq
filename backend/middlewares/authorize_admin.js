@@ -1,18 +1,20 @@
-const authorizeAdmin = (req, res, next) => {
+const Book = require('../models/book_model');
 
-    if (!req.user) {
-        return res.status(401).json({
-            msg: "Authentication required"
-        });
+const authorizer = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+
+        if (req.user.role !== "admin") {
+            return res.status(403).json({
+                msg: "Forbidden"
+            });
+        }
+        
+        next();
+        }
+    catch (error) {
+        next(error);
     }
-
-    if (req.user.role !== "admin") {
-        return res.status(403).json({
-            msg: "Forbidden"
-        });
-    }
-
-    next();
 };
 
-module.exports = authorizeAdmin;
+module.exports = authorizer;

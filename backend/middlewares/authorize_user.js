@@ -1,11 +1,8 @@
 const User = require('../models/user_model');
 
-const authorizeUser = async (req, res, next) => {
-
+const authorizer = async (req, res, next) => {
     try {
-
         const id = req.params.id;
-
         const user = await User.findById(id);
 
         if (!user) {
@@ -18,17 +15,18 @@ const authorizeUser = async (req, res, next) => {
             return next();
         }
 
-        if (user._id.toString() !== req.user.id.toString()) {
+        if (user._id.toString() !== id) {
             return res.status(403).json({
                 msg: "Forbidden"
             });
         }
 
-        next();
-
-    } catch (error) {
+            next();
+        }
+    catch (error) {
         next(error);
     }
+
 };
 
-module.exports = authorizeUser;
+module.exports = authorizer;

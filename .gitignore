@@ -1,5 +1,1 @@
-node_modules/
-config.env
-.env
-.env.*
-!.env.example
+/node_modules/

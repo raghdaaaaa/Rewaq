@@ -1,72 +1,42 @@
+// cmd commands used:
+//     1. npm init -y
+//     2. npm i mongoose express dotenv multer jsonwebtoken bcrypt
+//     3. npm install-scripts approve bcrypt@6.0.0
+
 require('dotenv').config({
-   path: './config.env'
+    path: './config.env'
 });
 
 const express = require('express');
-const mongoose = require('mongoose');
-
 const app = express();
-
-
-// ===================================
-// JSON Middleware
-// ===================================
-
 app.use(express.json());
 
+// ----------------------------------- routes:
+const bookRoute = require('./routes/book_route');
+const userRoute = require('./routes/user_route');
+const authRoute = require('./routes/auth_route');
 
-// ===================================
-// Routes
-// ===================================
-
-const bookRoute = require('./routes/book.route');
-const userRoute = require('./routes/user.route');
-const authRoute = require('./routes/auth.route');
-const borrowingRoute = require('./routes/borrowing.routes');
-
-
-// Books
+// ----------------------------------- middlewares: 
 app.use('/books', bookRoute);
-
-// Users
 app.use('/users', userRoute);
-
-// Authentication
 app.use('/auth', authRoute);
-
-// Borrowing
-app.use('/borrowing', borrowingRoute);
-
-
-// ===================================
-// Error Handler
-// ===================================
-
 const errorHandler = require('./middlewares/error_handler');
-
 app.use(errorHandler);
 
-
-// ===================================
-// Database
-// ===================================
-
-mongoose.connect(process.env.mongodb_url)
-   .then(() => {
-      console.log('DATABASE CONNECTED');
-   })
-   .catch((error) => {
-      console.log(`DATABASE ERROR:\n${error}`);
-   });
-
-
-// ===================================
-// Server
-// ===================================
-
+// ----------------------------------- server: 
 const port = process.env.server_port;
-const serverUrl = process.env.server_url;
+const server_url = process.env.server_url;
 
-app.listen(port, serverUrl, () => {
-   console.log(`SERVER LISTENING ON PORT ${port}`);
+app.listen(port, server_url, () => {
+    console.log(`SERVER LISTENING ON PORT ${port}`)
 });
+
+// ----------------------------------- database: 
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://127.0.0.1:27017/lab100')
+    .then(() => {
+        console.log("DATABSE CONNECTED");
+    })
+    .catch ((error) => {
+        console.log(`DATABSE ERROR:\n${error}`)
+    });
