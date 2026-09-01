@@ -9,7 +9,7 @@ exports.register = async (req, res, next) => {
             email,
             password,
             phone,
-            role
+            role        // this will be removed later
         } = req.body;
 
         password = await bcrypt.hash(req.body.password, 10);
@@ -19,7 +19,7 @@ exports.register = async (req, res, next) => {
             email,
             password,
             phone,
-            role
+            role        // this will be removed later
         });
 
         await user.save();
@@ -28,14 +28,15 @@ exports.register = async (req, res, next) => {
             name: user.name,
             email: user.email,
             id: user._id,
-            role: user.role
+            role: user.role,
+            tokenVersion: user.tokenVersion
         }, process.env.secret_key);
 
         const userResponse = user.toObject();
         delete userResponse.password;
-        
+
         res.status(201).json({
-            user: user,
+            user: userResponse,
             token: token
         });
     }
@@ -53,6 +54,12 @@ exports.login = async (req, res, next) => {
         
         const user = await User.findOne({ email });
 
+        if (!user) {
+            return res.status(400).json({
+                msg: "Invalid data"
+            });
+        }
+
         if (!await bcrypt.compare(password, user.password)) {
             return res.status(400).json({
                 msg: "Invalid data"
@@ -61,8 +68,10 @@ exports.login = async (req, res, next) => {
 
         const token = jwt.sign({
             name: user.name,
+            email: user.email,
             id: user._id,
-            role: user.role
+            role: user.role,
+            tokenVersion: user.tokenVersion
         }, process.env.secret_key);
 
         res.status(200).json({

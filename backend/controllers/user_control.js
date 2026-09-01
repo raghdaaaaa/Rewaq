@@ -32,9 +32,13 @@ const adminUpdateUser = async (req, res, next) => {
         update.password = await bcrypt.hash(update.password, 10);
     }
 
+    if (update.role && (update.role !== req.user.role)) {
+        update.tokenVersion = req.user.tokenVersion + 1;
+    }
+
     const user = await User.findByIdAndUpdate(req.params.id,update,
         {
-            new: true,
+            returnDocument: 'after',
             runValidators: true
         }
     ).select('-password');
@@ -89,6 +93,13 @@ const deleteAllUsers = async (req, res) => {
 const getOwnUser = async (req, res) => {
     const id = req.user.id;
     let user = await User.findById(id);
+
+    if (!user) {
+        return res.status(404).json({
+            msg: "User does not exist"
+        });
+    }
+
     user = user.toObject();
     delete user.password;
 

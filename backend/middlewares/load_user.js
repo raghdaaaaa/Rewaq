@@ -10,7 +10,7 @@ const loadUser = async (req, res, next) => {
             });
         }
 
-        req.user = user;
+        // req.user = user;     // not needed after the authenticate middleware
         next();
     }
     catch (error) {
