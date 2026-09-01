@@ -12,7 +12,6 @@ const addNewBook = async (content) => {
         author: content.author
     });
 
-
     if (exists) {
 
         const error = new Error(
@@ -24,11 +23,9 @@ const addNewBook = async (content) => {
         throw error;
     }
 
-
     const book = new Book(content);
 
     await book.save();
-
 
     return book;
 };
@@ -49,6 +46,27 @@ const getAllBooks = async () => {
 // ===========================================
 
 const getBookById = async (book) => {
+
+    return book;
+};
+
+
+// ===========================================
+// Get Book Cover
+// ===========================================
+
+const getBookCover = async (book) => {
+
+    if (!book.coverImage || !book.coverImage.data) {
+
+        const error = new Error(
+            "Book cover does not exist"
+        );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
 
     return book;
 };
@@ -120,6 +138,7 @@ module.exports = {
     addNewBook,
     getAllBooks,
     getBookById,
+    getBookCover,
     updateBook,
     deleteBook,
     deleteAllBooks,

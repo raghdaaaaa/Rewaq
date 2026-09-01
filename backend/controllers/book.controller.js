@@ -9,8 +9,19 @@ const addNewBook = async (req, res, next) => {
 
    try {
 
+      const content = {
+         ...req.body
+      };
+
+      if (req.file) {
+         content.coverImage = {
+            data: req.file.buffer,
+            contentType: req.file.mimetype
+         };
+      }
+
       const book = await bookService.addNewBook(
-         req.body
+         content
       );
 
       res.status(201).json({
@@ -23,7 +34,6 @@ const addNewBook = async (req, res, next) => {
 
    }
 };
-
 
 // ===========================================
 // Get All Books
@@ -75,9 +85,20 @@ const updateBook = async (req, res, next) => {
 
    try {
 
+      const update = {
+         ...req.body
+      };
+
+      if (req.file) {
+         update.coverImage = {
+            data: req.file.buffer,
+            contentType: req.file.mimetype
+         };
+      }
+
       const book = await bookService.updateBook(
          req.params.id,
-         req.body
+         update
       );
 
       res.status(200).json(book);
@@ -168,6 +189,30 @@ const searchBooks = async (req, res, next) => {
    }
 };
 
+// ===========================================
+// Book Cover Image
+// ===========================================
+
+const getBookCover = async (req, res, next) => {
+
+   try {
+
+      const book =
+         await bookService.getBookCover(req.book);
+
+      res.contentType(
+         book.coverImage.contentType
+      );
+
+      res.send(book.coverImage.data);
+
+   } catch (error) {
+
+      next(error);
+
+   }
+};
+
 
 module.exports = {
    addNewBook,
@@ -176,5 +221,6 @@ module.exports = {
    updateBook,
    deleteBook,
    deleteAllBooks,
-   searchBooks
+   searchBooks,
+   getBookCover
 };
