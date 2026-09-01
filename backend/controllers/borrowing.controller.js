@@ -72,8 +72,35 @@ const returnBook = async (req, res, next) => {
    }
 };
 
+// ===========================================
+// My Books
+// ===========================================
+
+const getMyBooks = async (req, res, next) => {
+
+   try {
+      const userId = req.user.id;
+
+      const borrowings =
+         await borrowingService.getMyBooks(
+            userId
+         );
+      res.status(200).json({
+         msg: "My borrowed books",
+         borrowings
+      });
+   }
+   catch (error) {
+
+      next(error);
+   }
+};
+
+
+
 
 module.exports = {
    borrowBook,
-   returnBook
+   returnBook,
+   getMyBooks
 };

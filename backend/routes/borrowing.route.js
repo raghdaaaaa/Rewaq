@@ -19,5 +19,11 @@ router.post(
     borrowingControl.returnBook
 );
 
+router.get(
+    '/my-books',
+    authenticate,
+    borrowingControl.getMyBooks
+);
+
 
 module.exports = router;
