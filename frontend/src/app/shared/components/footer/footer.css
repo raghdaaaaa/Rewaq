@@ -1,0 +1,29 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  background: #452604 !important;  /* أسود فخم */
+  border-top: 3px solid #f3dbc4;
+  min-height: 60px;
+  padding: 10px 0;
+}
+
+.footer .text-white-50 {
+  color: #f3dbc4 !important;
+}
+
+.footer a {
+  color: #f3dbc4 !important;
+  transition: all 0.3s;
+}
+
+.footer a:hover {
+  color: #f3dbc4 !important;
+  text-decoration: none !important;
+}
+
+.footer i {
+  color: #f3dbc4;
+}

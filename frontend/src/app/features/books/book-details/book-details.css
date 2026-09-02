@@ -1,0 +1,21 @@
+.book-cover .placeholder-cover {
+  height: 400px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px dashed #dee2e6;
+}
+
+.book-cover img {
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.book-meta {
+  font-size: 0.95rem;
+}
+
+.book-meta i {
+  width: 20px;
+  color: #6c757d;
+}

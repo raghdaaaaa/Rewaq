@@ -1,0 +1,59 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container">
+    <!-- Brand -->
+    <a class="navbar-brand d-flex align-items-center" routerLink="/">
+      <i class="fas fa-book-open me-2 "></i>
+      <span class="fw-bold">Rewaq</span>
+    </a>
+
+    <!-- Toggle Button -->
+    <button class="navbar-toggler" type="button" (click)="toggleMenu()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar Links -->
+    <div class="collapse navbar-collapse" [class.show]="isMenuOpen">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/books" routerLinkActive="active">
+            <i class="fas fa-book"></i> Explore
+          </a>
+        </li>
+        
+        @if (isLoggedIn) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/my-borrowings" routerLinkActive="active">
+              <i class="fas fa-history"></i> My Books
+            </a>
+          </li>
+        }
+
+        @if (isAdmin) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin-books" routerLinkActive="active">
+              <i class="fas fa-cog"></i> Admin
+            </a>
+          </li>
+        }
+      </ul>
+
+      <!-- Right side -->
+      <div class="d-flex align-items-center">
+        @if (isLoggedIn) {
+          <span class="text-white-50 me-3">
+            <i class="fas fa-user-circle"></i> {{ currentUser?.name || 'User' }}
+          </span>
+          <button class="btn btn-outline-light btn-sm" (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        } @else {
+          <a routerLink="/login" class="btn btn-outline-light me-2">Login</a>
+          <a routerLink="/register" class="btn btn-primary">Register</a>
+        }
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- مساحة عشان المحتوى ما يختفيش -->
+<div style="height: 70px;"></div>

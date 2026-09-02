@@ -1,0 +1,70 @@
+<div class="container py-4">
+  @if (isLoading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  } @else {
+    @if (book(); as book) {
+      <button class="btn btn-outline-secondary mb-4" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i> Back to Books
+      </button>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="book-cover">
+            @if (book.coverImage) {
+              <img [src]="book.coverImage" [alt]="book.title" class="img-fluid rounded shadow">
+            } @else {
+              <div class="placeholder-cover d-flex align-items-center justify-content-center">
+                <i class="fas fa-book-open fa-5x text-muted"></i>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="col-md-8">
+          <div class="book-info">
+            <span class="badge bg-primary mb-2">{{ book.category || 'General' }}</span>
+            <h1 class="display-5 fw-bold">{{ book.title }}</h1>
+            <h5 class="text-muted mb-3">by {{ book.author }}</h5>
+            
+            <div class="book-meta d-flex gap-4 mb-3">
+              <span><i class="fas fa-file-alt"></i> {{ book.pages || 'N/A' }} pages</span>
+              <span><i class="fas fa-calendar-alt"></i> Published: {{ book.publishedYear || 'N/A' }}</span>
+              <span>
+                <i class="fas fa-check-circle" [class.text-success]="book.available" [class.text-danger]="!book.available"></i>
+                {{ book.available ? 'Available' : 'Borrowed' }}
+              </span>
+            </div>
+
+            <p class="lead">{{ book.description }}</p>
+
+            @if (isLoggedIn && book.available) {
+              <button 
+                class="btn btn-primary btn-lg mt-3"
+                (click)="borrowBook()"
+                [disabled]="isBorrowing()"
+              >
+                @if (isBorrowing()) {
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                }
+                <i class="fas fa-book-open me-2"></i>
+                Borrow Book
+              </button>
+            } @else if (!book.available) {
+              <div class="alert alert-warning mt-3">
+                <i class="fas fa-clock"></i> This book is currently borrowed
+              </div>
+            } @else {
+              <button class="btn btn-outline-secondary mt-3" routerLink="/login">
+                <i class="fas fa-sign-in-alt"></i> Login to Borrow
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  }
+</div>

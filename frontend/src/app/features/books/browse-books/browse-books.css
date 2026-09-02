@@ -1,0 +1,102 @@
+.browse-header h1 {
+  color: #452604 !important;  /* بني داكن فخم */
+  font-family: 'Georgia', serif;
+  font-weight: bold;
+}
+
+.browse-header .text-muted {
+  color: #7a6b5a !important;
+}
+
+/* Search Box */
+.search-section .input-group-text {
+  background: #fff;
+  border: 2px solid #1a3c5e;
+  border-right: none;
+  color: #f3dbc4;
+}
+
+.search-section .form-control {
+  border: 2px solid #1a3c5e;
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+  padding: 12px 20px;
+  font-family: 'Georgia', serif;
+}
+
+.search-section .form-control:focus {
+  box-shadow: none;
+  border-color: #f3dbc4;
+}
+
+.search-section .form-select {
+  border: 2px solid #1a3c5e;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-family: 'Georgia', serif;
+}
+
+.search-section .form-select:focus {
+  box-shadow: none;
+  border-color: #f3dbc4;
+}
+
+/* Book Cards */
+.book-card {
+  background: #ffffff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(26, 60, 94, 0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.book-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 35px rgba(201, 168, 76, 0.2);
+}
+
+.book-card .card-body {
+  padding: 1.5rem;
+}
+
+.book-card .badge-primary {
+  background: #1a3c5e !important;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.book-card .card-title {
+  color: #1a3c5e;
+  font-family: 'Georgia', serif;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.book-card .card-text {
+  color: #7a6b5a !important;
+}
+
+.book-card .btn-outline-primary {
+  color: #f3dbc4;
+  border-color: #f3dbc4;
+}
+
+.book-card .btn-outline-primary:hover {
+  background: #f3dbc4;
+  border-color: #f3dbc4;
+  color: #1a3c5e;
+}
+
+.book-card .badge-light {
+  background: #f5f0eb !important;
+  color: #1a3c5e;
+}
+
+.book-card .badge-light i {
+  color: #f3dbc4;
+}
