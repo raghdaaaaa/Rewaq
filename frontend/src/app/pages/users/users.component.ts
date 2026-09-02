@@ -2,11 +2,10 @@ import { ChangeDetectionStrategy, Component, OnInit, computed, inject } from '@a
 import { FormsModule } from '@angular/forms';
 import { CreateUserRequest, UserService } from '../../core/services/user.service';
 import { LibraryUser, UserRole } from '../../models/user.model';
-import { NavbarComponent } from '../../shared/navbar/navbar.component';
 
 @Component({
   selector: 'app-users',
-  imports: [FormsModule, NavbarComponent],
+  imports: [FormsModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

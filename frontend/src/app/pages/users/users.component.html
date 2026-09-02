@@ -1,5 +1,4 @@
 <main class="page-shell">
-  <app-navbar />
   <section class="content">
     <div class="hero"><div class="title-wrap"><span class="title-icon">♙</span><div><p class="eyebrow">MEMBER DIRECTORY</p><h1>User Accounts</h1><p>Manage system administrators and patrons.</p></div></div><div class="hero-actions"><label class="search"><span>⌕</span><input [(ngModel)]="searchTerm" (ngModelChange)="resetPage()" placeholder="Search users by name or email..." aria-label="Search users"></label><button class="btn btn-primary" type="button" (click)="showModal = true">♙ Add User</button></div></div>
     <section class="management-card">
@@ -12,6 +11,5 @@
       <div class="pagination"><span>Showing {{ startEntry() }} to {{ endEntry() }} of {{ filteredUsers().length }} users</span><div><button type="button" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">‹</button>@for (page of pageNumbers(); track page) {<button type="button" [class.current]="currentPage === page" (click)="changePage(page)">{{ page }}</button>}<button type="button" [disabled]="currentPage >= pageCount()" (click)="changePage(currentPage + 1)">›</button></div></div>
     </section>
   </section>
-  <footer class="footer"><div><b>Rewaq</b>© 2024 Rewaq Knowledge Sanctuary. All rights reserved.</div><div class="footer-links"><span>Privacy Policy</span><span>Terms of Service</span><span>Help Center</span></div></footer>
 </main>
 @if (showModal) {<div class="modal-backdrop" (click)="showModal = false"><form class="modal" (ngSubmit)="addUser()" (click)="$event.stopPropagation()"><div><p class="eyebrow">NEW MEMBER</p><h2>Add a user</h2><button type="button" class="close" (click)="showModal = false">×</button></div><label>Full name<input name="name" [(ngModel)]="newUser.name" required></label><label>Email<input type="email" name="email" [(ngModel)]="newUser.email" required></label><div class="form-grid"><label>Phone<input name="phone" [(ngModel)]="newUser.phone"></label><label>Role<select name="role" [(ngModel)]="newUser.role"><option value="user">User</option><option value="admin">Admin</option></select></label></div><label>Password<input type="password" name="password" [(ngModel)]="newUser.password" required></label><button class="btn btn-primary" type="submit">Create user</button></form></div>}

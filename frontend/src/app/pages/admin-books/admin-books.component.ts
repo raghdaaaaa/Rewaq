@@ -2,13 +2,12 @@ import { ChangeDetectionStrategy, Component, OnInit, computed, inject } from '@a
 import { FormsModule } from '@angular/forms';
 import { BookService, CreateBookRequest } from '../../core/services/book.service';
 import { Book } from '../../models/book.model';
-import { NavbarComponent } from '../../shared/navbar/navbar.component';
 
 type BookFilter = 'All Books' | 'Available' | 'Borrowed';
 
 @Component({
   selector: 'app-admin-books',
-  imports: [FormsModule, NavbarComponent],
+  imports: [FormsModule],
   templateUrl: './admin-books.component.html',
   styleUrl: './admin-books.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

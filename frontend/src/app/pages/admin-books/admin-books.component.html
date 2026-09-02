@@ -1,5 +1,4 @@
 <main class="page-shell">
-  <app-navbar />
   <section class="content">
     <div class="hero">
       <div><p class="eyebrow">COLLECTION CONTROL</p><h1>Inventory Management</h1><p>Oversee and manage the complete library collection. Ensure all metadata is accurate and track availability across the network.</p></div>
@@ -19,6 +18,5 @@
       <div class="pagination"><span>Showing {{ startEntry() }} to {{ endEntry() }} of {{ filteredBooks().length }} books</span><div><button type="button" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">‹</button>@for (page of pageNumbers(); track page) {<button type="button" [class.current]="currentPage === page" (click)="changePage(page)">{{ page }}</button>}<button type="button" [disabled]="currentPage >= pageCount()" (click)="changePage(currentPage + 1)">›</button></div></div>
     </section>
   </section>
-  <footer class="footer"><div><b>Rewaq</b>© 2024 Rewaq Knowledge Sanctuary. All rights reserved.</div><div class="footer-links"><span>Privacy Policy</span><span>Terms of Service</span><span>Help Center</span></div></footer>
 </main>
 @if (showModal) { <div class="modal-backdrop" (click)="showModal = false"><form class="modal" (ngSubmit)="addBook()" (click)="$event.stopPropagation()"><div><p class="eyebrow">NEW CATALOGUE ITEM</p><h2>Add a book</h2><button type="button" class="close" (click)="showModal = false">×</button></div><label>Title<input name="title" [(ngModel)]="newBook.title" required></label><label>Author<input name="author" [(ngModel)]="newBook.author" required></label><div class="form-grid"><label>Pages<input type="number" min="1" name="pages" [(ngModel)]="newBook.pages"></label><label>Availability<select name="available" [(ngModel)]="newBook.available"><option [ngValue]="true">Available</option><option [ngValue]="false">Borrowed</option></select></label></div><button class="btn btn-primary" type="submit">Add to inventory</button></form></div> }
