@@ -12,7 +12,7 @@
 
 html, body {
   height: 100%;
-  background-color: #f5f0eb;  /* بيج ناعم */
+  background-color: #b3eae3;  /* بيج ناعم */
   font-family: 'Georgia', 'Times New Roman', serif;
   color: #2c3e50;
 }
@@ -37,11 +37,11 @@ html, body {
 
 /* ألوان المساعدة */
 .text-gold {
-  color: #f3dbc4 !important;
+  color: #f3dbc4 ;
 }
 
 .bg-gold {
-  background-color: #f3dbc4 !important;
+  background-color: #f3dbc4 ;
 }
 
 .btn-gold {
@@ -67,5 +67,5 @@ html, body {
 
 .card-elegant:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(201, 168, 76, 0.15);
+  box-shadow: 0 8px 30px #134E4A ;
 }

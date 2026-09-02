@@ -1,68 +1,155 @@
+
+/* Header */
 .browse-header h1 {
-  color: #452604 !important;  /* بني داكن فخم */
+  color: #134E4A !important;  
   font-family: 'Georgia', serif;
   font-weight: bold;
 }
 
 .browse-header .text-muted {
-  color: #7a6b5a !important;
+  color: #134E4A !important;
+  opacity: 0.75;
 }
 
-/* Search Box */
-.search-section .input-group-text {
-  background: #fff;
-  border: 2px solid #1a3c5e;
+.search-section {
+  padding: 20px 0;
+}
+
+.search-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+
+.search-icon {
+  background: #b3eae3 !important;
+  border: 2px solid #90cfc6;
   border-right: none;
-  color: #f3dbc4;
+  border-radius: 12px 0 0 12px;
+  color: #134E4A;
+  padding: 12px 16px;
+  transition: all 0.3s ease;
 }
 
-.search-section .form-control {
-  border: 2px solid #1a3c5e;
+.search-input {
+  background: #b3eae3 !important;
+  border: 2px solid #90cfc6;
+  border-left: none;
+  border-right: none;
+  padding: 12px 20px;
+  font-family: 'Georgia', serif;
+  color: #134E4A;
+  transition: all 0.3s ease;
+  flex: 1;
+  min-width: 0;
+}
+
+.search-input::placeholder {
+  color: #134E4A;
+  opacity: 0.6;
+}
+
+.search-input:focus {
+  box-shadow: none !important;
+  background: #b3eae3 !important;
+  border-color: #134E4A;
+  outline: none;
+}
+
+.search-wrapper:hover .search-input {
+  border-color: #134E4A;
+}
+
+.search-wrapper:hover .search-icon {
+  border-color: #134E4A;
+}
+
+.btn-clear {
+  background: #b3eae3 !important;
+  border: 2px solid #90cfc6;
   border-left: none;
   border-radius: 0 12px 12px 0;
-  padding: 12px 20px;
-  font-family: 'Georgia', serif;
+  color: #134E4A;
+  padding: 12px 16px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.search-section .form-control:focus {
-  box-shadow: none;
-  border-color: #f3dbc4;
+.btn-clear:hover {
+  background: #134E4A !important;
+  color: white;
+  border-color: #134E4A;
 }
 
-.search-section .form-select {
-  border: 2px solid #1a3c5e;
+.search-select {
+  background: #b3eae3 !important;
+  border: 2px solid #90cfc6;
   border-radius: 12px;
   padding: 12px 20px;
   font-family: 'Georgia', serif;
+  color: #134E4A;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  width: 100%;
 }
 
-.search-section .form-select:focus {
-  box-shadow: none;
-  border-color: #f3dbc4;
+.search-select:focus {
+  box-shadow: none !important;
+  border-color: #134E4A;
+  background: #b3eae3 !important;
 }
 
-/* Book Cards */
+.search-select:hover {
+  border-color: #134E4A;
+}
+
+.books-count {
+  background: #134E4A !important;
+  color: white !important;
+}
+
+.custom-spinner {
+  color: #134E4A;
+}
+
+.no-books i {
+  color: #90cfc6;
+}
+
+.no-books h3 {
+  color: #134E4A;
+}
+
+.no-books .text-muted {
+  color: #134E4A !important;
+  opacity: 0.7;
+}
+
 .book-card {
   background: #ffffff;
-  border: none;
+  border: 2px solid #90cfc6;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(26, 60, 94, 0.08);
+  box-shadow: 0 4px 20px rgba(19, 78, 74, 0.08);
   transition: all 0.3s ease;
   overflow: hidden;
+  height: 100%;
 }
 
 .book-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 8px 35px rgba(201, 168, 76, 0.2);
+  box-shadow: 0 8px 35px rgba(144, 207, 198, 0.25);
+  border-color: #134E4A;
 }
 
 .book-card .card-body {
   padding: 1.5rem;
 }
 
-.book-card .badge-primary {
-  background: #1a3c5e !important;
-  color: #fff;
+.category-badge {
+  background: #90cfc6 !important;
+  color: #134E4A !important;
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
   font-size: 0.75rem;
@@ -71,32 +158,108 @@
 }
 
 .book-card .card-title {
-  color: #1a3c5e;
+  color: #134E4A;
   font-family: 'Georgia', serif;
   font-weight: bold;
   font-size: 1.1rem;
 }
 
 .book-card .card-text {
-  color: #7a6b5a !important;
+  color: #134E4A !important;
 }
 
-.book-card .btn-outline-primary {
-  color: #f3dbc4;
-  border-color: #f3dbc4;
+.book-card .text-muted {
+  color: #134E4A !important;
+  opacity: 0.75;
 }
 
-.book-card .btn-outline-primary:hover {
-  background: #f3dbc4;
-  border-color: #f3dbc4;
-  color: #1a3c5e;
+.description-text {
+  color: #134E4A !important;
+  opacity: 0.6;
 }
 
-.book-card .badge-light {
-  background: #f5f0eb !important;
-  color: #1a3c5e;
+.btn-details {
+  color: #134E4A;
+  border: 2px solid #134E4A;
+  background: transparent;
+  transition: all 0.3s ease;
+  padding: 6px 16px;
 }
 
-.book-card .badge-light i {
-  color: #f3dbc4;
+.btn-details:hover {
+  background: #134E4A;
+  border-color: #134E4A;
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+.pages-badge {
+  background: #b3eae3 !important;
+  color: #134E4A !important;
+  font-weight: 500;
+}
+
+.pages-badge i {
+  color: #134E4A;
+}
+
+.btn-load-more {
+  background: #90cfc6;
+  color: #134E4A;
+  border: 2px solid #134E4A;
+  font-weight: 600;
+  padding: 10px 30px;
+  transition: all 0.3s ease;
+}
+
+.btn-load-more:hover {
+  background: #134E4A;
+  border-color: #134E4A;
+  color: white;
+  transform: scale(1.05);
+}
+
+.books-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -12px;
+}
+
+.books-grid [class*="col-"] {
+  display: flex;
+  padding: 0 12px;
+  margin-bottom: 24px;
+}
+
+.container {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+.book-card {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.btn {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.search-wrapper {
+  will-change: contents;
+}
+
+.row.g-3 {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.row.g-3 > * {
+  padding-right: 12px;
+  padding-left: 12px;
+}
+
+.book-card:hover {
+  transform: translateY(-8px) scale(1);
 }

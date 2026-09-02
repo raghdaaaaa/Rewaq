@@ -1,7 +1,7 @@
 <div class="container py-4">
   <!-- Header -->
-  <div class="text-center mb-5">
-    <h1 class="display-4 fw-bold text-primary">Explore Library</h1>
+  <div class="text-center mb-5 browse-header">
+    <h1 class="display-4 fw-bold">Explore Library</h1>
     <p class="text-muted">
       Discover our curated collection of knowledge, spanning centuries of thought and imagination.
     </p>
@@ -12,13 +12,13 @@
     <div class="row g-3">
       <div class="col-md-6">
         <div class="input-group">
-          <span class="input-group-text bg-white">
-            <i class="fas fa-search text-muted"></i>
+          <span class="input-group-text">
+            <i class="fas fa-search"></i>
           </span>
           <input 
             type="text" 
             class="form-control form-control-lg"
-            placeholder="Search by title, author, or keyword..."
+            placeholder="Search by title or author..."
             [(ngModel)]="searchQuery"
             (input)="onSearch()"
           >
@@ -41,7 +41,7 @@
         </select>
       </div>
       <div class="col-md-3 text-end">
-        <span class="badge bg-secondary fs-6 p-2">
+        <span class="badge fs-6 p-2 books-count">
           {{ filteredBooks().length }} books found
         </span>
       </div>
@@ -51,7 +51,7 @@
   <!-- Loading -->
   @if (isLoading()) {
     <div class="text-center py-5">
-      <div class="spinner-border text-primary" role="status">
+      <div class="spinner-border custom-spinner" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
@@ -60,8 +60,8 @@
   <!-- Books Grid -->
   @if (!isLoading()) {
     @if (filteredBooks().length === 0) {
-      <div class="text-center py-5">
-        <i class="fas fa-book-open fa-4x text-muted mb-3"></i>
+      <div class="text-center py-5 no-books">
+        <i class="fas fa-book-open fa-4x mb-3"></i>
         <h3>No books found</h3>
         <p class="text-muted">Try adjusting your search or filters</p>
       </div>
@@ -72,16 +72,16 @@
             <div class="card book-card h-100">
               <div class="card-body">
                 <div class="book-category mb-2">
-                  <span class="badge bg-primary">{{ book.category || 'General' }}</span>
+                  <span class="badge category-badge">{{ book.category || 'General' }}</span>
                 </div>
                 <h5 class="card-title">{{ book.title }}</h5>
                 <p class="card-text text-muted">by {{ book.author }}</p>
-                <p class="card-text small">{{ (book.description || '').slice(0,100) }}...</p>
+                <p class="card-text small description-text">{{ (book.description || '').slice(0,100) }}...</p>
                 <div class="d-flex justify-content-between align-items-center mt-3">
-                  <span class="badge bg-light text-dark">
+                  <span class="badge pages-badge">
                     <i class="fas fa-file-alt"></i> {{ book.pages || 'N/A' }} pages
                   </span>
-                  <a [routerLink]="['/books', book._id]" class="btn btn-outline-primary btn-sm">
+                  <a [routerLink]="['/books', book._id]" class="btn btn-sm btn-details">
                     Details <i class="fas fa-arrow-right"></i>
                   </a>
                 </div>
@@ -95,7 +95,7 @@
 
   <!-- Load More -->
   <div class="text-center mt-4">
-    <button class="btn btn-outline-secondary">
+    <button class="btn btn-load-more">
       Load More Volumes <i class="fas fa-chevron-down ms-1"></i>
     </button>
   </div>

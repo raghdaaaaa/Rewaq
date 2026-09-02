@@ -4,26 +4,26 @@
   left: 0;
   right: 0;
   z-index: 1050;
-  background: #452604 !important;  /* أزرق داكن فخم */
+  background: #b3eae3 !important;  
   min-height: 70px;
   box-shadow: 0 2px 15px rgba(0,0,0,0.2);
-  border-bottom: 3px solid #f3dbc4;
+  border-bottom: 3px solid #90cfc6;
 }
 
 .navbar .navbar-brand {
-  color: #ffffff !important;
+  color: #134E4A !important;
   font-size: 1.5rem;
   font-weight: bold;
   font-family: 'Georgia', serif;
 }
 
 .navbar .navbar-brand i {
-  color: #f3dbc4;
+  color: #134E4A;
   margin-right: 10px;
 }
 
 .navbar .nav-link {
-  color: rgba(255,255,255,0.8) !important;
+  color: #555252 !important;
   transition: all 0.3s;
   padding: 0.5rem 1rem;
   font-family: 'Georgia', serif;
@@ -31,33 +31,34 @@
 
 .navbar .nav-link:hover,
 .navbar .nav-link.active {
-  color: #f3dbc4 !important;
+  color: #454242 !important;
   background: rgba(255,255,255,0.05);
   border-radius: 8px;
 }
 
 .navbar .nav-link i {
   margin-right: 6px;
-  color: #f3dbc4;
+  color: #454242;
 }
 
 .navbar .btn-outline-light {
-  border-color: #f3dbc4;
-  color: #f3dbc4;
+  border-color: #134E4A;
+  color: #454242;
 }
 
 .navbar .btn-outline-light:hover {
-  background: #f3dbc4;
-  color: #1a3c5e;
+  background: #134E4A;
+  color: #FFFFFF;
 }
 
 .navbar .btn-primary {
-  background: #f3dbc4;
-  border-color: #f3dbc4;
-  color: #1a3c5e;
+  background: #134E4A;
+  border-color: #134E4A;
+  color: #FFFFFF;
 }
 
 .navbar .btn-primary:hover {
-  background: #f3dbc4;
-  border-color: #f3dbc4;
+  background: #FFFFFF;
+  border-color: #134E4A;
+  color: #134E4A;
 }
