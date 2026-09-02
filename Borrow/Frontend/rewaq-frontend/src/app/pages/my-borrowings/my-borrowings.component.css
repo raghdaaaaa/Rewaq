@@ -1,0 +1,509 @@
+/* ==========================================================
+   Rewaq — my-borrowings.component.css
+   Clean Layout Responsive Architecture aligned with Figma Design
+   ========================================================== */
+
+/* ---------- Page Host & Container ---------- */
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  background: #E4FFFB;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #3C4947;
+}
+
+/* Container الرئيسي المسئول عن التوسيط والمجال الجانبي (Padding) */
+.sanctuary-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 32px 80px 32px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .sanctuary-container {
+    padding: 24px 16px 40px 16px;
+  }
+}
+
+/* ---------- Header Section ---------- */
+.hero-section {
+  margin-bottom: 32px;
+}
+
+.hero-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 42px;
+  letter-spacing: -0.8px;
+  color: #006B5F;
+  margin: 0 0 8px 0;
+}
+
+.hero-text {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 26px;
+  color: #3C4947;
+  max-width: 672px;
+  margin: 0;
+}
+
+/* ---------- Section Headings & Badges ---------- */
+.section {
+  margin-bottom: 48px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 34px;
+  color: #00201E;
+  margin: 0;
+}
+
+/* Count Badge Pill */
+.badge-teal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #BBF3ED;
+  border-radius: 9999px;
+  padding: 6px 14px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+  color: #3C4947;
+}
+
+/* ---------- Empty State ---------- */
+.empty-state {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 48px 24px;
+  text-align: center;
+  color: #6C7A77;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.empty-icon {
+  margin-bottom: 12px;
+}
+
+.empty-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #00201E;
+  margin: 8px 0 4px;
+}
+
+.empty-text {
+  font-size: 14px;
+  color: #3C4947;
+  margin: 0;
+}
+
+/* ---------- Active Readings Grid ---------- */
+.readings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .readings-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .readings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Reading Card Styles */
+.reading-card {
+  position: relative;
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.08), 0px 2px 4px -2px rgba(0, 0, 0, 0.04);
+  padding: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 337px;
+  box-sizing: border-box;
+}
+
+/* Decorative blurred blob top-right corner */
+.reading-card::before {
+  content: '';
+  position: absolute;
+  width: 128px;
+  height: 128px;
+  top: -48px;
+  right: -48px;
+  background: #62FAE3;
+  opacity: 0.2;
+  filter: blur(20px);
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+/* Card Top Content Row */
+.card-top-row {
+  display: flex;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.book-cover {
+  width: 96px;
+  height: 128px;
+  border-radius: 6px;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  object-fit: cover;
+  flex-shrink: 0;
+  background-color: #C1F9F3;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex-grow: 1;
+}
+
+.category-tag {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #006B5F;
+  margin-bottom: 6px;
+}
+
+.book-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 28px;
+  color: #00201E;
+  margin: 0 0 4px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.book-author {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  color: #3C4947;
+  margin: 0;
+}
+
+/* ---------- Dates & Progress Section ---------- */
+.card-bottom-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.dates-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.date-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.date-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+  color: #3C4947;
+}
+
+.date-value {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  color: #00201E;
+}
+
+.date-value.due-normal {
+  color: #006B5F;
+}
+
+.date-value.due-urgent,
+.date-value.due-overdue {
+  color: #BA1A1A;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Progress Bar Track & Fill */
+.progress-track,
+.card-progress-track {
+  width: 100% !important;
+  height: 6px !important;
+  background-color: #C1F9F3 !important;
+  border-radius: 9999px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  display: block !important;
+  margin: 2px 0 !important;
+}
+
+.progress-fill,
+.card-progress-fill {
+  height: 100% !important;
+  border-radius: 9999px !important;
+  background-color: #006B5F !important;
+  transition: width 0.3s ease !important;
+  display: block !important;
+}
+
+.progress-fill.urgent,
+.progress-fill.overdue,
+.card-progress-fill.urgent,
+.card-progress-fill.overdue {
+  background-color: #BA1A1A !important;
+}
+
+/* Action Button (إعادة التنسيق الزاوي والألوان) */
+button.return-btn,
+button.card-return-btn {
+  width: 100% !important;
+  height: 41px !important;
+  background-color: #006B5F !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 17px !important;
+  letter-spacing: 0.14px !important;
+  color: #FFFFFF !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease !important;
+  margin-top: 4px !important;
+}
+
+button.return-btn:hover:not(:disabled),
+button.card-return-btn:hover:not(:disabled) {
+  background-color: #00584E !important;
+}
+
+button.return-btn:disabled,
+button.card-return-btn:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}
+
+/* ---------- Borrowing History Table ---------- */
+.history-table-wrapper {
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  width: 100%;
+}
+
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 16px;
+  padding: 16px 24px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 1.5fr 1fr 1fr;
+  }
+
+  .col-date:nth-of-type(1) {
+    display: none;
+  }
+}
+
+.table-header {
+  background: #B5EDE7;
+}
+
+.table-header .col-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #3C4947;
+}
+
+.table-row {
+  padding: 20px 24px;
+  border-bottom: 1px solid #B5EDE7;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.col-cover-details {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.history-book-cover {
+  width: 40px;
+  height: 56px;
+  border-radius: 4px;
+  background: #C1F9F3;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.history-book-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 0.14px;
+  color: #00201E;
+  margin-bottom: 2px;
+}
+
+.history-book-author {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  color: #3C4947;
+}
+
+.col-date {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  color: #3C4947;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  display: inline-block;
+}
+
+.status-badge.on-time {
+  color: #6C7A77;
+}
+
+.status-badge.on-time .status-dot {
+  background: #6C7A77;
+}
+
+.status-badge.late {
+  color: #BA1A1A;
+}
+
+.status-badge.late .status-dot {
+  background: #BA1A1A;
+}
+
+/* Messages & Spinners */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #BBF3ED;
+  border-top-color: #006B5F;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.message-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+.message-banner.success {
+  background: #BBF3ED;
+  color: #005047;
+}
+
+.message-banner.error {
+  background: #FFDAD6;
+  color: #BA1A1A;
+}

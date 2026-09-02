@@ -1,0 +1,164 @@
+<div class="sanctuary-container">
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">My Sanctuary</h1>
+      <p class="hero-text">
+        A reflection of your intellectual journey. Manage your currently active readings and review your borrowing
+        history within the Rewaq sanctuary.
+      </p>
+    </div>
+  </header>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-spinner" role="status" aria-label="Loading borrowings">
+    <div class="spinner"></div>
+    <span class="visually-hidden">Loading your borrowings...</span>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <!-- Messages -->
+    <div *ngIf="successMessage" class="message-banner success" role="alert">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-width="1.5" />
+        <path d="M4.5 8.5L7 11L11.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="message-banner error" role="alert">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-width="1.5" />
+        <path d="M8 5V9M8 11V11.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+      {{ errorMessage }}
+    </div>
+
+    <!-- Active Readings Section -->
+    <section class="section" aria-labelledby="active-readings-heading">
+      <div class="section-header">
+        <h2 id="active-readings-heading" class="section-title">Active Readings</h2>
+        <div *ngIf="activeBorrowings.length > 0">
+          <span class="badge-count">{{ activeBorrowings.length }} Books Currently Borrowed</span>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="activeBorrowings.length === 0" class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"
+          class="empty-icon" aria-hidden="true">
+          <rect x="6" y="10" width="36" height="28" rx="2" stroke="currentColor" stroke-width="1.5" />
+          <path d="M14 18h20M14 24h16M14 30h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        <h3 class="empty-title">No Active Readings</h3>
+        <p class="empty-text">You have no active borrowings right now.</p>
+      </div>
+
+      <!-- Active Cards Grid -->
+      <div class="readings-grid" *ngIf="activeBorrowings.length > 0" role="list">
+        <article class="reading-card" *ngFor="let item of activeBorrowings" role="listitem">
+
+          <!-- Top Section: Cover & Info -->
+          <div class="card-top-row">
+            <img [src]="item.coverUrl" [alt]="'Cover of ' + item.bookTitle" class="book-cover" loading="lazy">
+            <div class="card-info">
+              <span class="category-tag">{{ $any(item).category || 'GENERAL' }}</span>
+              <h3 class="book-title">{{ item.bookTitle }}</h3>
+              <p class="book-author">by {{ item.bookAuthor }}</p>
+            </div>
+          </div>
+
+          <!-- Bottom Section: Dates, Progress & Action -->
+          <div class="card-bottom-section">
+            <div class="dates-row">
+              <div class="date-item">
+                <span class="date-label">Borrowed</span>
+                <span class="date-value">{{ item.startDate | date:'MMM d, yyyy' }}</span>
+              </div>
+              <div class="date-item">
+                <span class="date-label">Due Date</span>
+                <span class="date-value" [class.due-urgent]="item.isUrgent || item.isOverdue"
+                  [class.due-normal]="!item.isUrgent && !item.isOverdue">
+                  <svg *ngIf="item.isUrgent || item.isOverdue" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  {{ item.dueDateLabel }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Custom Progress Bar -->
+            <div class="card-progress-track">
+              <div class="card-progress-fill" [style.width.%]="item.progress"
+                [class.urgent]="item.isUrgent || item.isOverdue"></div>
+            </div>
+
+            <!-- Custom Action Button -->
+            <button class="card-return-btn" [disabled]="returningId === item._id" (click)="returnBook(item)"
+              [attr.aria-busy]="returningId === item._id">
+              <span *ngIf="returningId === item._id" class="btn-spinner" aria-hidden="true"></span>
+              <svg *ngIf="returningId !== item._id" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M13.3333 8L7.33333 2M13.3333 8L7.33333 14M13.3333 8H2.66667" stroke="white" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              Return Book
+            </button>
+          </div>
+
+        </article>
+      </div>
+    </section>
+
+    <!-- Borrowing History Section -->
+    <section class="section" aria-labelledby="history-heading">
+      <div class="section-header">
+        <h2 id="history-heading" class="section-title">Borrowing History</h2>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="historyBorrowings.length === 0" class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"
+          class="empty-icon" aria-hidden="true">
+          <rect x="6" y="10" width="36" height="28" rx="2" stroke="currentColor" stroke-width="1.5" />
+          <path d="M14 18h20M14 24h16M14 30h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        <h3 class="empty-title">No Borrowing History</h3>
+        <p class="empty-text">No borrowing history yet.</p>
+      </div>
+
+      <!-- History Table Container -->
+      <div class="history-table-wrapper" *ngIf="historyBorrowings.length > 0" role="region"
+        aria-label="Borrowing history table">
+        <div class="table-header">
+          <div class="col-label">BOOK DETAILS</div>
+          <div class="col-label">BORROWED</div>
+          <div class="col-label">RETURNED</div>
+          <div class="col-label">STATUS</div>
+        </div>
+
+        <div class="table-body">
+          <div class="table-row" *ngFor="let item of historyBorrowings">
+            <div class="col-cover-details">
+              <img [src]="item.coverUrl" [alt]="'Cover of ' + item.bookTitle" class="history-book-cover">
+              <div>
+                <div class="history-book-title">{{ item.bookTitle }}</div>
+                <div class="history-book-author">{{ item.bookAuthor }}</div>
+              </div>
+            </div>
+            <div class="col-date">{{ item.startDate | date:'MMM d, yyyy' }}</div>
+            <div class="col-date">{{ item.endDate | date:'MMM d, yyyy' }}</div>
+            <div>
+              <span class="status-badge" [class.on-time]="item.returnedOnTime" [class.late]="!item.returnedOnTime">
+                <span class="status-dot" aria-hidden="true"></span>
+                {{ item.returnedOnTime ? 'Returned on time' : 'Returned late' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
