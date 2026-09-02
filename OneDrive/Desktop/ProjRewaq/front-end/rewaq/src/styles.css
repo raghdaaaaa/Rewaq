@@ -1,0 +1,72 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none !important;
+}
+
+.custom-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ced4da;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.custom-input-group:focus-within {
+  border-color: #0f766e;
+  box-shadow: 0 0 0 0.25rem rgba(15, 118, 110, 0.15);
+}
+
+.custom-input-group.is-invalid-group {
+  border-color: #dc3545;
+}
+
+.custom-input-group.is-invalid-group:focus-within {
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.15);
+}
+
+.custom-input-group .input-icon {
+  padding-left: 0.85rem;
+  padding-right: 0.25rem;
+  color: #8c98a4;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.custom-input-group .form-control {
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0.65rem 0.65rem;
+  font-size: 0.95rem;
+  background: transparent;
+  color: #212529;
+}
+
+.custom-input-group .form-control:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.custom-input-group .toggle-btn {
+  border: none;
+  background: transparent;
+  padding: 0 0.85rem;
+  color: #8c98a4;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  transition: color 0.15s ease-in-out;
+}
+
+.custom-input-group .toggle-btn:hover {
+  color: #0f766e;
+}
