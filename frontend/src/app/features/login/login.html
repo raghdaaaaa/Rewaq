@@ -1,0 +1,136 @@
+<div class="container-fluid vh-100 d-flex justify-content-center align-items-center bg-light">
+  <div class="row w-100 h-100 justify-content-center align-items-center">
+    <div
+      class="col-10 col-lg-10 bg-white login-card d-flex flex-row p-0 shadow-lg"
+      style="border-radius: 1rem; overflow: hidden; min-height: 600px"
+    >
+      <div
+        class="image-section d-none d-lg-flex col-lg-6 flex-column justify-content-end p-5 text-white"
+        style="
+          background:
+            linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)),
+            url('/LibraryPhoto.png') center/cover no-repeat;
+        "
+      >
+        <div>
+          <h2 class="fw-bold mb-3" style="font-size: 2.5rem; font-family: 'Merriweather', serif">
+            Discover a World of Knowledge
+          </h2>
+          <p class="mb-0 text-white-55" style="font-size: 1.1rem">
+            Access thousands of digital resources, journals, and books from anywhere.
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="form-section col-12 col-lg-6 p-5 d-flex flex-column justify-content-center bg-white"
+      >
+        <div class="text-center mb-4">
+          <img
+            src="/logo.png"
+            alt="Rewaq Library Logo"
+            style="height: 55px; width: auto"
+            class="mx-auto"
+          />
+        </div>
+
+        <div class="mb-4 text-center">
+          <h2 class="fw-bold mb-1" style="color: #212529; font-family: 'Merriweather', serif">
+            Welcome Back to Rewaq
+          </h2>
+          <p class="text-muted">Access your digital collection</p>
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <div class="mb-3">
+            <label class="form-label text-muted small fw-bold">Email Address</label>
+            <div
+              class="custom-input-group"
+              [class.is-invalid-group]="
+                loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+              "
+            >
+              <span class="input-icon"><i class="bi bi-envelope"></i></span>
+              <input type="email" class="form-control" formControlName="email" />
+            </div>
+            <div
+              *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+              class="text-danger small mt-1"
+            >
+              <small *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</small>
+              <small *ngIf="loginForm.get('email')?.errors?.['email']"
+                >Please enter a valid email address.</small
+              >
+            </div>
+          </div>
+
+          <!-- حقل كلمة المرور -->
+          <div class="mb-3">
+            <label class="form-label text-muted small fw-bold">Password</label>
+            <div
+              class="custom-input-group"
+              [class.is-invalid-group]="
+                loginForm.get('password')?.invalid && loginForm.get('password')?.touched
+              "
+            >
+              <span class="input-icon"><i class="bi bi-lock"></i></span>
+              <input
+                #loginPw
+                [type]="showPassword ? 'text' : 'password'"
+                class="form-control"
+                formControlName="password"
+              />
+              <button
+                type="button"
+                class="toggle-btn"
+                (mousedown)="$event.preventDefault()"
+                (click)="togglePassword(loginPw)"
+                tabindex="-1"
+                title="Toggle password visibility"
+              >
+                <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+              </button>
+            </div>
+            <div
+              *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+              class="text-danger small mt-1"
+            >
+              <small *ngIf="loginForm.get('password')?.errors?.['required']"
+                >Password is required.</small
+              >
+              <small *ngIf="loginForm.get('password')?.errors?.['minlength']"
+                >Password must be at least 6 characters.</small
+              >
+            </div>
+          </div>
+
+          <!-- رسالة الخطأ القادمة من الـ API (لو موجودة) -->
+          <div *ngIf="errorMessage" class="alert alert-danger py-2 mb-3 small">
+            {{ errorMessage }}
+          </div>
+
+          <!-- زر تسجيل الدخول -->
+          <button
+            type="submit"
+            class="btn w-100 py-2 text-white fw-semibold mb-3 shadow-sm"
+            style="background-color: #5b9b8f; border: none"
+            [disabled]="isLoading"
+          >
+            {{ isLoading ? 'Signing In...' : 'Sign In to Library →' }}
+          </button>
+        </form>
+
+        <div class="text-center mt-3">
+          <span class="text-muted small">No account?</span>
+          <a
+            routerLink="/register"
+            class="text-decoration-none fw-bold small"
+            style="color: #0d5c47"
+          >
+            Create one</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

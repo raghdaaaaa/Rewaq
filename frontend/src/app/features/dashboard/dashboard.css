@@ -1,0 +1,860 @@
+/* =========================================================
+   REWAQ DESIGN SYSTEM & STYLES (Matching Provided Mockups)
+   ========================================================= */
+
+:host {
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #1e293b;
+  background-color: #f0fdf9;
+}
+
+.rewaq-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f0fdf9;
+}
+
+/* ---------------- Navbar ---------------- */
+.rewaq-navbar {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e6f4f1;
+  padding: 0.75rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+.brand-title {
+  font-family: 'Merriweather', Georgia, serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #0f766e;
+}
+
+.rewaq-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.rewaq-nav-link {
+  color: #64748b;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.25rem;
+  position: relative;
+  transition: color 0.15s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.rewaq-nav-link:hover {
+  color: #0f766e;
+}
+
+.rewaq-nav-link.active {
+  color: #0f766e;
+  font-weight: 700;
+}
+
+.rewaq-nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -0.85rem;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #0d9488;
+  border-radius: 3px 3px 0 0;
+}
+
+.user-avatar-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-avatar-placeholder {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #ccfbf1;
+  color: #0f766e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.logout-btn {
+  color: #64748b;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.logout-btn:hover {
+  color: #dc2626;
+}
+
+.profile-btn {
+  color: #64748b;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.profile-btn:hover {
+  color: #0f766e;
+}
+
+/* ---------------- Hero Banner (Inventory) ---------------- */
+.inventory-hero-banner {
+  background: linear-gradient(135deg, #dcfce7 0%, #ccfbf1 60%, #99f6e4 100%);
+  border-radius: 1.25rem;
+  padding: 2.25rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(13, 148, 136, 0.15);
+}
+
+.hero-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #0f766e;
+  letter-spacing: -0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.hero-subtitle {
+  color: #334155;
+  font-size: 1.05rem;
+  max-width: 650px;
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+/* ---------------- Buttons ---------------- */
+.btn-rewaq-primary {
+  background-color: #0d5c47;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.6rem;
+  padding: 0.6rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn-rewaq-primary:hover {
+  background-color: #083c2e;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(13, 92, 71, 0.25);
+}
+
+.btn-rewaq-white {
+  background-color: #ffffff;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.6rem;
+  padding: 0.6rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn-rewaq-white:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+}
+
+/* ---------------- Stat Cards ---------------- */
+.metric-card {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid #e6f4f1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.metric-title {
+  color: #475569;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.metric-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.metric-number {
+  font-size: 1.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  margin-bottom: 0.4rem;
+}
+
+.metric-subtext {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.metric-card-dark {
+  background-color: #0d5c47;
+  color: #ffffff;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.25rem 1rem;
+}
+
+.circle-progress-container {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 0.5rem;
+}
+
+/* ---------------- Table Card & Controls ---------------- */
+.content-table-card {
+  background-color: #ffffff;
+  border-radius: 1.25rem;
+  border: 1px solid #e6f4f1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+}
+
+.table-controls-bar {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.search-field-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+}
+
+.search-field-input {
+  width: 100%;
+  height: 42px;
+  padding-left: 2.5rem;
+  padding-right: 1rem;
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.6rem;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.search-field-input:focus {
+  outline: none;
+  background-color: #ffffff;
+  border-color: #0d9488;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+}
+
+.search-field-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  pointer-events: none;
+}
+
+.filter-pills-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.filter-pill-btn {
+  border: none;
+  background-color: #ccfbf1;
+  color: #0f766e;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.45rem 1rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter-pill-btn:hover {
+  background-color: #99f6e4;
+}
+
+.filter-pill-btn.active {
+  background-color: #14b8a6;
+  color: #ffffff;
+}
+
+.filter-pill-btn.pill-muted {
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.filter-pill-btn.pill-muted:hover {
+  background-color: #cbd5e1;
+}
+
+.filter-pill-btn.pill-muted.active {
+  background-color: #14b8a6;
+  color: #ffffff;
+}
+
+/* ---------------- Table Styles ---------------- */
+.rewaq-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 0;
+}
+
+.rewaq-table th {
+  background-color: #ffffff;
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.rewaq-table td {
+  padding: 1.1rem 1.5rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #f8fafc;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.rewaq-table tr:hover td {
+  background-color: #fbfdfc;
+}
+
+.browse-cover-box {
+  aspect-ratio: 2 / 3;
+  background-color: #f1f5f9;
+  position: relative;
+  overflow: hidden;
+}
+
+.book-thumb-box {
+  width: 48px;
+  height: 72px;
+  border-radius: 0.4rem;
+  background-color: #e2e8f0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.book-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.book-initial-box {
+  width: 48px;
+  height: 72px;
+  border-radius: 0.4rem;
+  background-color: #475569;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.tag-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.3rem;
+  background-color: #ccfbf1;
+  color: #0f766e;
+  text-transform: uppercase;
+  margin-right: 0.35rem;
+  display: inline-block;
+}
+
+/* ---------------- Status Badges ---------------- */
+.badge-status-available {
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.78rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.badge-status-available::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #16a34a;
+}
+
+.badge-status-borrowed {
+  background-color: #f1f5f9;
+  color: #475569;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.78rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.badge-status-borrowed::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #64748b;
+}
+
+.badge-role-admin {
+  background-color: #ccfbf1;
+  color: #0f766e;
+  padding: 0.35rem 0.85rem;
+  border-radius: 0.4rem;
+  font-weight: 600;
+  font-size: 0.82rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.badge-role-patron {
+  background-color: #f1f5f9;
+  color: #475569;
+  padding: 0.35rem 0.85rem;
+  border-radius: 0.4rem;
+  font-weight: 500;
+  font-size: 0.82rem;
+}
+
+/* ---------------- Pagination ---------------- */
+.table-pagination-footer {
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #f1f5f9;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+/* ---------------- User Accounts Header (Image 2) ---------------- */
+.users-header-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.users-header-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 0.85rem;
+  background-color: #0d9488;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.btn-add-user {
+  height: 42px;
+  white-space: nowrap;
+  padding: 0 1.15rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border-radius: 0.6rem;
+  background-color: #0d5c47;
+  color: #ffffff;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-add-user:hover {
+  background-color: #083c2e;
+  box-shadow: 0 4px 12px rgba(13, 92, 71, 0.22);
+}
+
+/* ---------------- Table Action Buttons ---------------- */
+.table-actions-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.85rem; /* Distinct separation between buttons */
+}
+
+.btn-table-action-edit {
+  width: 34px;
+  height: 34px;
+  border-radius: 0.5rem;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  color: #475569;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-table-action-edit:hover {
+  background-color: #f1f5f9;
+  border-color: #0f766e;
+  color: #0f766e;
+}
+
+.btn-table-action-delete {
+  width: 34px;
+  height: 34px;
+  border-radius: 0.5rem;
+  border: 1px solid #fecaca;
+  background-color: #ffffff;
+  color: #dc2626;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-table-action-delete:hover {
+  background-color: #fef2f2;
+  border-color: #ef4444;
+  color: #b91c1c;
+}
+
+/* ---------------- Book Details View (Image 3) ---------------- */
+.back-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 2rem;
+  transition: color 0.15s ease;
+}
+
+.back-link-btn:hover {
+  color: #0f766e;
+}
+
+.book-detail-cover-card {
+  border-radius: 1.25rem;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 10px 25px -5px rgba(15, 118, 110, 0.12);
+  background-color: #f1f5f9;
+  max-width: 360px;
+}
+
+.book-detail-cover-img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+.book-detail-badge {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  z-index: 2;
+}
+
+.detail-category-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0d9488;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+
+.detail-book-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: -0.5px;
+  line-height: 1.25;
+  margin-bottom: 0.5rem;
+}
+
+.detail-author-name {
+  color: #64748b;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.meta-stat-pill-card {
+  background-color: #e6fffa;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid #ccfbf1;
+  height: 100%;
+}
+
+.meta-stat-pill-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #0f766e;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 0.35rem;
+}
+
+.meta-stat-pill-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.synopsis-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.75rem;
+}
+
+.synopsis-body-text {
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  max-width: 680px;
+}
+
+/* ---------------- My Borrowings View ---------------- */
+.borrowing-card {
+  background-color: #ffffff;
+  border-radius: 1.25rem;
+  border: 1px solid #e6f4f1;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.borrowing-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(15, 118, 110, 0.09);
+  border-color: #99f6e4;
+}
+
+.borrowing-header-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.borrowing-cover-box {
+  width: 110px;
+  height: 165px;
+  border-radius: 0.85rem;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  background-color: #f1f5f9;
+}
+
+.borrowing-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.borrowing-info-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding-left: 0.25rem;
+}
+
+.loan-meta-box {
+  background-color: #f0fdf9;
+  border: 1px solid #ccfbf1;
+  border-radius: 0.85rem;
+  padding: 0.85rem 1.15rem;
+}
+
+.loan-due-pill {
+  background-color: #dcfce7;
+  color: #166534;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  padding: 0.3rem 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.empty-loans-card {
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  border: 1px solid #e6f4f1;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  padding: 3.5rem 2rem;
+  text-align: center;
+}
+
+.empty-loans-icon-box {
+  width: 72px;
+  height: 72px;
+  border-radius: 1.25rem;
+  background-color: #ccfbf1;
+  color: #0f766e;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ---------------- Footer ---------------- */
+.rewaq-footer {
+  background-color: #ffffff;
+  border-top: 1px solid #e6f4f1;
+  padding: 1.75rem 0;
+  margin-top: auto;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+/* ---------------- Modals ---------------- */
+.rewaq-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.rewaq-modal-content {
+  background-color: #ffffff;
+  border-radius: 1.25rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.rewaq-modal-header {
+  padding: 1.25rem 1.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rewaq-modal-body {
+  padding: 1.75rem;
+}
+
+.rewaq-modal-footer {
+  padding: 1.25rem 1.75rem;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}

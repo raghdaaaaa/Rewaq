@@ -1,0 +1,1318 @@
+<div class="rewaq-wrapper">
+  <!-- Top Navigation Bar -->
+  <header class="rewaq-navbar shadow-sm">
+    <div class="container d-flex align-items-center justify-content-between">
+      <!-- Left: Logo & Brand -->
+      <div class="d-flex align-items-center gap-4">
+        <a class="d-flex align-items-center gap-2 text-decoration-none" href="#" (click)="$event.preventDefault(); setTab('browse')">
+          <img
+            src="/logo.png"
+            alt="Rewaq Logo"
+            width="34"
+            height="34"
+            class="rounded-circle p-1 bg-white border"
+          />
+          <span class="brand-title">Rewaq</span>
+        </a>
+
+        <!-- Center: Navigation Links -->
+        <nav class="rewaq-nav-links d-none d-md-flex">
+          <button
+            class="rewaq-nav-link"
+            [class.active]="activeTab() === 'browse' || (activeTab() === 'book-details' && previousTab() === 'browse')"
+            (click)="setTab('browse')"
+          >
+            Browse Books
+          </button>
+
+          <!-- Admin Inventory Link -->
+          <button
+            *ngIf="authService.isAdmin()"
+            class="rewaq-nav-link"
+            [class.active]="activeTab() === 'inventory' || (activeTab() === 'book-details' && previousTab() === 'inventory')"
+            (click)="setTab('inventory')"
+          >
+            Admin Books
+          </button>
+
+          <!-- Admin Users Link (Matching Image 2) -->
+          <button
+            *ngIf="authService.isAdmin()"
+            class="rewaq-nav-link"
+            [class.active]="activeTab() === 'users'"
+            (click)="setTab('users')"
+          >
+            Users
+          </button>
+
+          <button
+            class="rewaq-nav-link"
+            [class.active]="activeTab() === 'my-borrowings' || (activeTab() === 'book-details' && previousTab() === 'my-borrowings')"
+            (click)="setTab('my-borrowings')"
+          >
+            My Borrowings
+            <span
+              *ngIf="myBorrowings().length > 0"
+              class="badge bg-teal-subtle text-teal rounded-pill ms-1"
+              style="font-size: 0.75rem; background-color: #ccfbf1; color: #0f766e"
+            >
+              {{ myBorrowings().length }}
+            </span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Right: User Profile & Logout -->
+      <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-2">
+          <div class="user-avatar-placeholder">
+            {{ getUserInitials(authService.currentUser()?.name) }}
+          </div>
+          <div class="d-none d-sm-block text-start">
+            <div class="fw-bold text-dark small" style="line-height: 1.2">
+              {{ authService.isAdmin() ? 'Administrator' : authService.currentUser()?.name }}
+            </div>
+            <div class="text-muted" style="font-size: 0.72rem">
+              {{ authService.isAdmin() ? 'Librarian' : 'Patron' }}
+            </div>
+          </div>
+        </div>
+
+        <div class="vr mx-1 d-none d-sm-block" style="height: 24px; opacity: 0.2"></div>
+
+        <button class="profile-btn" (click)="openProfileModal()" title="Edit my profile">
+          <i class="bi bi-person-gear fs-6"></i>
+          <span class="d-none d-sm-inline">Profile</span>
+        </button>
+
+        <button class="logout-btn" (click)="logout()" title="Logout">
+          <i class="bi bi-box-arrow-right fs-6"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav Links -->
+  <div class="d-flex d-md-none bg-white border-bottom px-3 py-2 gap-2 overflow-x-auto">
+    <button
+      class="btn btn-sm"
+      [ngClass]="activeTab() === 'browse' ? 'btn-rewaq-primary' : 'btn-light'"
+      (click)="setTab('browse')"
+    >
+      Browse
+    </button>
+    <button
+      *ngIf="authService.isAdmin()"
+      class="btn btn-sm"
+      [ngClass]="activeTab() === 'inventory' ? 'btn-rewaq-primary' : 'btn-light'"
+      (click)="setTab('inventory')"
+    >
+      Admin Books
+    </button>
+    <button
+      *ngIf="authService.isAdmin()"
+      class="btn btn-sm"
+      [ngClass]="activeTab() === 'users' ? 'btn-rewaq-primary' : 'btn-light'"
+      (click)="setTab('users')"
+    >
+      Users
+    </button>
+    <button
+      class="btn btn-sm"
+      [ngClass]="activeTab() === 'my-borrowings' ? 'btn-rewaq-primary' : 'btn-light'"
+      (click)="setTab('my-borrowings')"
+    >
+      My Borrowings ({{ myBorrowings().length }})
+    </button>
+  </div>
+
+  <!-- Global Alert Banner -->
+  <div class="container mt-3" *ngIf="notification()">
+    <div
+      class="alert alert-dismissible fade show shadow-sm d-flex align-items-center justify-content-between"
+      [ngClass]="notification()?.type === 'success' ? 'alert-success border-success' : 'alert-danger border-danger'"
+      role="alert"
+    >
+      <div class="d-flex align-items-center gap-2">
+        <i
+          class="bi fs-5"
+          [ngClass]="notification()?.type === 'success' ? 'bi-check-circle-fill text-success' : 'bi-exclamation-triangle-fill text-danger'"
+        ></i>
+        <span class="small fw-semibold">{{ notification()?.text }}</span>
+      </div>
+      <button type="button" class="btn-close" (click)="dismissNotification()"></button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="container py-4 flex-grow-1">
+
+    <!-- ========================================================
+         VIEW: BOOK DETAILS (Matches Mockup Image 3)
+         ======================================================== -->
+    <section *ngIf="activeTab() === 'book-details' && selectedBookDetail()">
+      <!-- Back Navigation Button -->
+      <div>
+        <button class="back-link-btn" (click)="backFromBookDetails()">
+          <i class="bi bi-arrow-left fs-5"></i>
+          <span>{{ backLabel() }}</span>
+        </button>
+      </div>
+
+      <div class="row g-5 align-items-start">
+        <!-- Left Column: Book Cover Image & Badge -->
+        <div class="col-12 col-md-5 col-lg-4">
+          <div class="book-detail-cover-card">
+            <span
+              class="book-detail-badge"
+              [ngClass]="selectedBookDetail()?.available ? 'badge-status-available' : 'badge-status-borrowed'"
+            >
+              {{ selectedBookDetail()?.available ? 'Available' : 'Borrowed' }}
+            </span>
+            <img loading="lazy" decoding="async"
+              [src]="getBookCover(selectedBookDetail())"
+              [alt]="selectedBookDetail()?.title"
+              class="book-detail-cover-img"
+              (error)="$any($event.target).src = '/LibraryPhoto.png'"
+            />
+          </div>
+        </div>
+
+        <!-- Right Column: Details, Metadata & Actions -->
+        <div class="col-12 col-md-7 col-lg-8">
+          <!-- Category & Edition -->
+          <div class="detail-category-label">
+            {{ getBookCategoryName(selectedBookDetail()) }}
+          </div>
+
+          <!-- Book Title -->
+          <h1 class="detail-book-title">
+            {{ selectedBookDetail()?.title }}
+          </h1>
+
+          <!-- Author -->
+          <div class="detail-author-name">
+            by {{ selectedBookDetail()?.author }}
+          </div>
+
+          <!-- 3 Meta Stat Cards -->
+          <div class="row g-3 mb-4" style="max-width: 620px">
+            <div class="col-4">
+              <div class="meta-stat-pill-card">
+                <div class="meta-stat-pill-label">Pages</div>
+                <div class="meta-stat-pill-value">
+                  <span>{{ selectedBookDetail()?.pages || '—' }}</span>
+                  <i class="bi bi-file-earmark-text text-muted small ms-auto"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-4">
+              <div class="meta-stat-pill-card">
+                <div class="meta-stat-pill-label">Published</div>
+                <div class="meta-stat-pill-value">
+                  <span>{{ getBookPublishedYear(selectedBookDetail()) }}</span>
+                  <i class="bi bi-calendar3 text-muted small ms-auto"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-4">
+              <div class="meta-stat-pill-card">
+                <div class="meta-stat-pill-label">ISBN</div>
+                <div class="meta-stat-pill-value">
+                  <span style="font-size: 0.95rem">{{ getBookIsbn(selectedBookDetail()) }}</span>
+                  <i class="bi bi-hash text-muted small ms-auto"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Synopsis Section -->
+          <div class="mb-4" *ngIf="getBookSynopsis(selectedBookDetail())">
+            <div class="synopsis-title">Synopsis</div>
+            <p class="synopsis-body-text">
+              {{ getBookSynopsis(selectedBookDetail()) }}
+            </p>
+          </div>
+
+          <!-- Action Buttons Row -->
+          <div class="d-flex align-items-center gap-3 pt-2 flex-wrap">
+            <button
+              *ngIf="selectedBookDetail()?.available"
+              class="btn btn-rewaq-primary rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2"
+              [disabled]="actionLoadingId() === selectedBookDetail()?._id"
+              (click)="borrowBook(selectedBookDetail())"
+            >
+              <span *ngIf="actionLoadingId() === selectedBookDetail()?._id" class="spinner-border spinner-border-sm"></span>
+              <i *ngIf="actionLoadingId() !== selectedBookDetail()?._id" class="bi bi-journal-bookmark"></i>
+              <span class="fw-bold">Borrow Book</span>
+            </button>
+
+            <span
+              *ngIf="!selectedBookDetail()?.available && isBookBorrowedByMe(selectedBookDetail()?._id)"
+              class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill fw-bold"
+            >
+              <i class="bi bi-check-circle me-1"></i> Borrowed by You
+            </span>
+
+            <span
+              *ngIf="!selectedBookDetail()?.available && !isBookBorrowedByMe(selectedBookDetail()?._id)"
+              class="badge-status-borrowed py-2 px-3 fw-bold"
+            >
+              Currently Checked Out
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW 1: INVENTORY MANAGEMENT (Matches Mockup Image 1)
+         ======================================================== -->
+    <section *ngIf="activeTab() === 'inventory' && authService.isAdmin()">
+      <!-- Hero Banner -->
+      <div class="inventory-hero-banner mb-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+        <div>
+          <h1 class="hero-title">Inventory Management</h1>
+          <p class="hero-subtitle">
+            Oversee and manage the complete library collection. Ensure all metadata is accurate and track availability across the network.
+          </p>
+        </div>
+        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+          <button class="btn btn-rewaq-white" (click)="exportBooks()" title="Export library inventory to CSV">
+            <i class="bi bi-download"></i>
+            <span>Export List</span>
+          </button>
+          <button class="btn btn-rewaq-primary" (click)="openAddBookModal()">
+            <i class="bi bi-plus-lg"></i>
+            <span>Add New Book</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Stat Cards -->
+      <div class="row g-3 mb-4">
+        <!-- Total Volume -->
+        <div class="col-6 col-lg-3">
+          <div class="metric-card">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="metric-title">Total Volume</div>
+              <div class="metric-icon-box" style="background-color: #ccfbf1; color: #0f766e">
+                <i class="bi bi-files"></i>
+              </div>
+            </div>
+            <div>
+              <div class="metric-number">{{ stats().total | number }}</div>
+              <div class="metric-subtext text-success d-flex align-items-center gap-1">
+                <i class="bi bi-arrow-up-short fs-6"></i>
+                <span>+{{ stats().total }} in catalog</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Currently Borrowed -->
+        <div class="col-6 col-lg-3">
+          <div class="metric-card">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="metric-title">Currently Borrowed</div>
+              <div class="metric-icon-box" style="background-color: #ede9fe; color: #6d28d9">
+                <i class="bi bi-journal-arrow-up"></i>
+              </div>
+            </div>
+            <div>
+              <div class="metric-number">{{ stats().borrowed | number }}</div>
+              <div class="metric-subtext text-muted d-flex align-items-center gap-1">
+                <i class="bi bi-arrow-up-short fs-6"></i>
+                <span>Active loans</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Available Books -->
+        <div class="col-6 col-lg-3">
+          <div class="metric-card">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="metric-title">Available Books</div>
+              <div class="metric-icon-box" style="background-color: #fee2e2; color: #dc2626">
+                <i class="bi bi-check2-circle"></i>
+              </div>
+            </div>
+            <div>
+              <div class="metric-number">{{ stats().available | number }}</div>
+              <div class="metric-subtext text-success d-flex align-items-center gap-1">
+                <i class="bi bi-check-lg fs-6"></i>
+                <span>Ready to borrow</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Utilization (Dark Card with Ring) -->
+        <div class="col-6 col-lg-3">
+          <div class="metric-card metric-card-dark rounded-4">
+            <div class="circle-progress-container">
+              <svg viewBox="0 0 36 36" class="w-100 h-100">
+                <path
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  fill="none"
+                  stroke="rgba(255, 255, 255, 0.2)"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  fill="none"
+                  stroke="#2dd4bf"
+                  stroke-width="3.5"
+                  [attr.stroke-dasharray]="stats().utilization + ', 100'"
+                />
+              </svg>
+            </div>
+            <div class="fs-4 fw-bold mb-0 text-white">{{ stats().utilization }}%</div>
+            <div class="small text-white-50" style="font-size: 0.75rem">System Utilization</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Card -->
+      <div class="content-table-card">
+        <!-- Search & Filter Controls Bar -->
+        <div class="table-controls-bar">
+          <div class="search-field-wrapper">
+            <i class="bi bi-search search-field-icon"></i>
+            <input
+              type="text"
+              class="search-field-input"
+              placeholder="Search by title, author, or ISBN..."
+              [ngModel]="bookSearchQuery()"
+              (ngModelChange)="onBookSearch($event)"
+            />
+          </div>
+
+          <div class="d-flex align-items-center gap-2">
+            <div class="filter-pills-group">
+              <button
+                class="filter-pill-btn"
+                [class.active]="bookFilter() === 'all'"
+                (click)="setBookFilter('all')"
+              >
+                All Books
+              </button>
+              <button
+                class="filter-pill-btn pill-muted"
+                [class.active]="bookFilter() === 'available'"
+                (click)="setBookFilter('available')"
+              >
+                Available
+              </button>
+              <button
+                class="filter-pill-btn pill-muted"
+                [class.active]="bookFilter() === 'borrowed'"
+                (click)="setBookFilter('borrowed')"
+              >
+                Borrowed
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Books Table -->
+        <div class="table-responsive">
+          <table class="rewaq-table">
+            <thead>
+              <tr>
+                <th style="width: 90px">ID</th>
+                <th>Title & Details</th>
+                <th>Author</th>
+                <th>Pages</th>
+                <th>Status</th>
+                <th style="width: 140px; text-align: end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let book of filteredBooks()">
+                <td class="text-muted fw-semibold" style="font-size: 0.85rem">
+                  {{ getShortId(book._id) }}
+                </td>
+                <td>
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="book-thumb-box shadow-sm" (click)="openBookDetails(book, 'inventory')" title="View book details">
+                      <img loading="lazy" decoding="async"
+                        [src]="getBookCover(book)"
+                        [alt]="book.title"
+                        class="book-thumb-img"
+                        (error)="$any($event.target).src = '/LibraryPhoto.png'"
+                      />
+                    </div>
+                    <div>
+                      <div
+                        class="fw-bold text-dark mb-1"
+                        style="font-size: 0.95rem; cursor: pointer"
+                        (click)="openBookDetails(book, 'inventory')"
+                        title="Click to view details"
+                      >
+                        {{ book.title }}
+                      </div>
+                      <div class="text-muted small mb-1" style="font-size: 0.78rem">
+                        ISBN: {{ getBookIsbn(book) }}
+                      </div>
+                      <div class="d-flex gap-1 flex-wrap">
+                        <span *ngFor="let cat of getBookCategory(book)" class="tag-badge">
+                          {{ cat }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="fw-medium text-dark">{{ book.author }}</td>
+                <td>{{ book.pages || 'N/A' }}</td>
+                <td>
+                  <span
+                    [ngClass]="book.available ? 'badge-status-available' : 'badge-status-borrowed'"
+                  >
+                    {{ book.available ? 'Available' : 'Borrowed' }}
+                  </span>
+                </td>
+                <td style="text-align: end">
+                  <div class="table-actions-cell">
+                    <button
+                      class="btn-table-action-edit"
+                      title="View details"
+                      (click)="openBookDetails(book, 'inventory')"
+                    >
+                      <i class="bi bi-eye" style="font-size: 0.88rem"></i>
+                    </button>
+                    <button
+                      class="btn-table-action-edit"
+                      title="Edit book details"
+                      (click)="openEditBookModal(book, $event)"
+                    >
+                      <i class="bi bi-pencil" style="font-size: 0.88rem"></i>
+                    </button>
+                    <button
+                      class="btn-table-action-delete"
+                      title="Delete book"
+                      (click)="deleteBook(book, $event)"
+                    >
+                      <i class="bi bi-trash" style="font-size: 0.88rem"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr *ngIf="filteredBooks().length === 0">
+                <td colspan="6" class="text-center py-5 text-muted">
+                  <i class="bi bi-journal-x fs-1 d-block mb-2 text-muted"></i>
+                  No books found matching criteria.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table Footer -->
+        <div class="table-pagination-footer">
+          <div>
+            Showing 1 to {{ filteredBooks().length }} of {{ books().length }} entries
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW 2: USER ACCOUNTS (Matches Mockup Image 2)
+         ======================================================== -->
+    <section *ngIf="activeTab() === 'users' && authService.isAdmin()">
+      <!-- Header Box (Image 2) -->
+      <div class="users-header-box">
+        <div class="d-flex align-items-center gap-3">
+          <div class="users-header-icon shadow-sm">
+            <i class="bi bi-people-fill"></i>
+          </div>
+          <div>
+            <h1 class="fw-bold text-dark mb-1" style="font-size: 1.85rem; letter-spacing: -0.5px">
+              User Accounts
+            </h1>
+            <p class="text-muted mb-0 small">
+              Manage system administrators and patrons.
+            </p>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 flex-grow-1 flex-md-grow-0 justify-content-end">
+          <div class="search-field-wrapper" style="max-width: 320px">
+            <i class="bi bi-search search-field-icon"></i>
+            <input
+              type="text"
+              class="search-field-input"
+              placeholder="Search users by name or email..."
+              [ngModel]="userSearchQuery()"
+              (ngModelChange)="onUserSearch($event)"
+            />
+          </div>
+
+          <button class="btn-add-user" (click)="openAddUserModal()">
+            <i class="bi bi-person-plus-fill"></i>
+            <span>Add User</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Users Table Card (Image 2) -->
+      <div class="content-table-card">
+        <div class="table-responsive">
+          <table class="rewaq-table">
+            <thead>
+              <tr>
+                <th>Patron</th>
+                <th>Contact Details</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th style="width: 120px; text-align: end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of filteredUsers()">
+                <td>
+                  <div class="d-flex align-items-center gap-3">
+                    <!-- Avatar with initials or photo -->
+                    <div
+                      class="rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm"
+                      style="width: 42px; height: 42px; background-color: #ede9fe; color: #5b21b6; font-size: 0.95rem; flex-shrink: 0"
+                    >
+                      {{ getUserInitials(user.name) }}
+                    </div>
+                    <div>
+                      <div class="fw-bold text-dark mb-1" style="font-size: 0.95rem">
+                        {{ user.name }}
+                      </div>
+                      <div class="text-muted" style="font-size: 0.78rem">
+                        ID: #{{ (user._id || user.id || '0000').slice(-5).toUpperCase() }}A
+                      </div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <div class="text-dark small fw-medium">{{ user.email }}</div>
+                  <div class="text-muted small" style="font-size: 0.8rem">
+                    {{ user.phone || '—' }}
+                  </div>
+                </td>
+
+                <td>
+                  <span
+                    [ngClass]="user.role === 'admin' ? 'badge-role-admin' : 'badge-role-patron'"
+                  >
+                    <i *ngIf="user.role === 'admin'" class="bi bi-shield-check me-1"></i>
+                    {{ user.role === 'admin' ? 'Admin' : 'Patron' }}
+                  </span>
+                </td>
+
+                <td>
+                  <span class="badge-status-available">
+                    Active
+                  </span>
+                </td>
+
+                <td style="text-align: end">
+                  <div class="table-actions-cell">
+                    <button
+                      class="btn-table-action-edit"
+                      title="Edit User"
+                      (click)="openEditUserModal(user)"
+                    >
+                      <i class="bi bi-pencil" style="font-size: 0.88rem"></i>
+                    </button>
+                    <button
+                      class="btn-table-action-delete"
+                      title="Delete User"
+                      (click)="deleteUser(user)"
+                    >
+                      <i class="bi bi-trash" style="font-size: 0.88rem"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr *ngIf="filteredUsers().length === 0">
+                <td colspan="5" class="text-center py-5 text-muted">
+                  <i class="bi bi-person-x fs-1 d-block mb-2 text-muted"></i>
+                  No users found matching query.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Users Table Footer -->
+        <div class="table-pagination-footer">
+          <div>
+            Showing 1 to {{ filteredUsers().length }} of {{ users().length }} users
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW 3: BROWSE BOOKS (Catalog for All Users & Patrons)
+         ======================================================== -->
+    <section *ngIf="activeTab() === 'browse'">
+      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
+        <div>
+          <h2 class="fw-bold text-dark mb-1" style="font-family: 'Merriweather', serif">
+            Browse Digital Library
+          </h2>
+          <p class="text-muted small mb-0">
+            Explore our curated catalog of books, journals, and academic literature. Click any book to view details.
+          </p>
+        </div>
+
+        <div class="search-field-wrapper">
+          <i class="bi bi-search search-field-icon"></i>
+          <input
+            type="text"
+            class="search-field-input"
+            placeholder="Search catalog by title or author..."
+            [ngModel]="bookSearchQuery()"
+            (ngModelChange)="onBookSearch($event)"
+          />
+        </div>
+      </div>
+
+      <!-- Catalog Cards Grid -->
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <div *ngFor="let book of filteredBooks()" class="col">
+          <div
+            class="card h-100 bg-white border rounded-4 shadow-sm overflow-hidden d-flex flex-column"
+            style="cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease"
+            (click)="openBookDetails(book, 'browse')"
+          >
+            <div class="browse-cover-box">
+              <img loading="lazy" decoding="async"
+                [src]="getBookCover(book)"
+                [alt]="book.title"
+                class="w-100 h-100 object-fit-cover"
+                (error)="$any($event.target).src = '/LibraryPhoto.png'"
+              />
+              <span
+                class="position-absolute top-0 end-0 m-2"
+                [ngClass]="book.available ? 'badge-status-available' : 'badge-status-borrowed'"
+              >
+                {{ book.available ? 'Available' : 'Borrowed' }}
+              </span>
+            </div>
+
+            <div class="card-body p-3 d-flex flex-column">
+              <div class="detail-category-label" style="font-size: 0.72rem; margin-bottom: 0.25rem">
+                {{ getBookCategoryName(book) }}
+              </div>
+              <h6 class="fw-bold text-dark mb-1 text-truncate" [title]="book.title">
+                {{ book.title }}
+              </h6>
+              <div class="text-muted small mb-2 text-truncate">
+                <i class="bi bi-pen me-1"></i>{{ book.author }}
+              </div>
+              <div class="small text-muted mb-3">
+                <i class="bi bi-file-earmark-text me-1"></i>{{ book.pages || 'N/A' }} pages
+              </div>
+
+              <div class="mt-auto pt-2 border-top d-flex align-items-center justify-content-between" (click)="$event.stopPropagation()">
+                <button
+                  class="btn btn-sm btn-outline-teal rounded-pill px-2"
+                  (click)="openBookDetails(book, 'browse')"
+                >
+                  Details
+                </button>
+
+                <div>
+                  <button
+                    *ngIf="book.available"
+                    class="btn btn-sm btn-rewaq-primary rounded-pill px-3"
+                    [disabled]="actionLoadingId() === book._id"
+                    (click)="borrowBook(book)"
+                  >
+                    <span *ngIf="actionLoadingId() === book._id" class="spinner-border spinner-border-sm me-1"></span>
+                    Borrow
+                  </button>
+
+                  <span *ngIf="!book.available && isBookBorrowedByMe(book._id)" class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 rounded-pill small">
+                    Borrowed by You
+                  </span>
+
+                  <span *ngIf="!book.available && !isBookBorrowedByMe(book._id)" class="text-muted small fw-semibold">
+                    Checked Out
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW 4: MY BORROWINGS (Reading Sanctuary)
+         ======================================================== -->
+    <section *ngIf="activeTab() === 'my-borrowings'">
+      <!-- Hero Banner -->
+      <div class="inventory-hero-banner mb-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+        <div>
+          <h1 class="hero-title">My Reading Sanctuary</h1>
+          <p class="hero-subtitle">
+            Manage your active loans, track return deadlines, and dive into your selected library monographs.
+          </p>
+        </div>
+        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+          <button class="btn btn-rewaq-primary" (click)="setTab('browse')">
+            <i class="bi bi-compass"></i>
+            <span>Browse More Books</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Stat Cards Row -->
+      <div class="row g-3 mb-4">
+        <!-- Card 1: Active Loans -->
+        <div class="col-12 col-md-4">
+          <div class="metric-card">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="metric-title">Active Loans</div>
+              <div class="metric-icon-box" style="background-color: #ccfbf1; color: #0f766e">
+                <i class="bi bi-journal-bookmark"></i>
+              </div>
+            </div>
+            <div>
+              <div class="metric-number">{{ myBorrowings().length }}</div>
+              <div class="metric-subtext text-teal d-flex align-items-center gap-1" style="color: #0f766e">
+                <i class="bi bi-check-circle-fill fs-6"></i>
+                <span>Currently checked out</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Circulation Period -->
+        <div class="col-12 col-md-4">
+          <div class="metric-card">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="metric-title">Standard Loan Period</div>
+              <div class="metric-icon-box" style="background-color: #ede9fe; color: #6d28d9">
+                <i class="bi bi-calendar-check"></i>
+              </div>
+            </div>
+            <div>
+              <div class="metric-number">14 Days</div>
+              <div class="metric-subtext text-muted d-flex align-items-center gap-1">
+                <i class="bi bi-info-circle fs-6"></i>
+                <span>Renewable upon request</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Account Standing -->
+        <div class="col-12 col-md-4">
+          <div class="metric-card">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="metric-title">Patron Standing</div>
+              <div class="metric-icon-box" style="background-color: #dcfce7; color: #166534">
+                <i class="bi bi-shield-check"></i>
+              </div>
+            </div>
+            <div>
+              <div class="metric-number" style="font-size: 1.6rem">Good Standing</div>
+              <div class="metric-subtext text-success d-flex align-items-center gap-1">
+                <i class="bi bi-check-lg fs-6"></i>
+                <span>No overdue returns</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls & Search Bar (When borrowings exist) -->
+      <div *ngIf="myBorrowings().length > 0" class="content-table-card p-3 mb-4 d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div class="search-field-wrapper" style="max-width: 380px">
+          <i class="bi bi-search search-field-icon"></i>
+          <input
+            type="text"
+            class="search-field-input"
+            placeholder="Search borrowed titles or authors..."
+            [ngModel]="borrowingSearchQuery()"
+            (ngModelChange)="onBorrowingSearch($event)"
+          />
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge bg-teal-subtle text-teal rounded-pill px-3 py-2 fw-semibold" style="background-color: #ccfbf1; color: #0f766e; font-size: 0.85rem">
+            Showing {{ filteredBorrowings().length }} of {{ myBorrowings().length }} active loans
+          </span>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="myBorrowings().length === 0" class="empty-loans-card">
+        <div class="empty-loans-icon-box shadow-sm">
+          <i class="bi bi-journal-bookmark"></i>
+        </div>
+        <h3 class="fw-bold text-dark mb-2" style="font-family: 'Merriweather', serif">
+          Your Reading Queue is Empty
+        </h3>
+        <p class="text-muted mx-auto mb-4" style="max-width: 520px; font-size: 0.95rem">
+          You currently have no active borrowed books in your sanctuary. Explore our curated collection of architectural and academic monographs to begin reading.
+        </p>
+        <button class="btn btn-rewaq-primary rounded-pill px-4 py-2" (click)="setTab('browse')">
+          <i class="bi bi-compass me-1"></i>
+          <span>Explore Book Catalog</span>
+        </button>
+      </div>
+
+      <!-- Borrowed Books Grid -->
+      <div *ngIf="myBorrowings().length > 0" class="row row-cols-1 row-cols-lg-2 g-4">
+        <div *ngFor="let loan of filteredBorrowings()" class="col">
+          <div class="borrowing-card p-4">
+            <!-- Top Card Section: Cover & Monograph Information -->
+            <div class="borrowing-header-layout">
+              <!-- Book Cover -->
+              <div
+                class="borrowing-cover-box"
+                style="cursor: pointer"
+                (click)="openBookDetails(loan.bookId, 'my-borrowings')"
+                title="Click to view full monograph details"
+              >
+                <img loading="lazy" decoding="async"
+                  [src]="getBookCover(loan.bookId)"
+                  [alt]="loan.bookId?.title"
+                  class="borrowing-cover-img"
+                  (error)="$any($event.target).src = '/LibraryPhoto.png'"
+                />
+              </div>
+
+              <!-- Information Column (Well-spaced from cover) -->
+              <div class="borrowing-info-col">
+                <!-- Category Label on its own line -->
+                <div class="detail-category-label mb-1" style="font-size: 0.75rem">
+                  {{ getBookCategoryName(loan.bookId) }}
+                </div>
+
+                <!-- Book Title -->
+                <h4
+                  class="fw-bold text-dark mb-1 text-truncate"
+                  style="font-size: 1.25rem; cursor: pointer; line-height: 1.3"
+                  (click)="openBookDetails(loan.bookId, 'my-borrowings')"
+                  [title]="loan.bookId?.title"
+                >
+                  {{ loan.bookId?.title || 'Untitled' }}
+                </h4>
+
+                <!-- Author -->
+                <div class="text-muted small mb-2 text-truncate" style="font-size: 0.88rem">
+                  <i class="bi bi-pen me-1"></i>by {{ loan.bookId?.author }}
+                </div>
+
+                <!-- Status Badge & Pages -->
+                <div class="d-flex align-items-center gap-2 flex-wrap mt-1">
+                  <span class="badge-status-available">
+                    Active Loan
+                  </span>
+                  <span class="text-muted small" style="font-size: 0.82rem">
+                    <i class="bi bi-file-earmark-text me-1"></i>{{ loan.bookId?.pages || '—' }} pages
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Loan Metadata Box -->
+            <div class="loan-meta-box mb-3">
+              <div class="row g-2 align-items-center">
+                <div class="col-6">
+                  <div class="text-muted small mb-1" style="font-size: 0.72rem; letter-spacing: 0.4px">
+                    <i class="bi bi-calendar3 me-1 text-teal" style="color: #0f766e"></i>BORROWED ON
+                  </div>
+                  <div class="fw-bold text-dark" style="font-size: 0.88rem">
+                    {{ loan.startDate | date:'mediumDate' }}
+                  </div>
+                </div>
+
+                <div class="col-6 text-end">
+                  <div class="text-muted small mb-1" style="font-size: 0.72rem; letter-spacing: 0.4px">
+                    <i class="bi bi-clock-history me-1 text-teal" style="color: #0f766e"></i>RETURN STATUS
+                  </div>
+                  <span class="loan-due-pill">
+                    <i class="bi bi-hourglass-split"></i>
+                    Not returned
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Actions Footer -->
+            <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between gap-2">
+              <button
+                type="button"
+                class="btn btn-sm btn-rewaq-white rounded-pill px-3"
+                (click)="openBookDetails(loan.bookId, 'my-borrowings')"
+                title="View full monograph details"
+              >
+                <i class="bi bi-eye me-1"></i>Details
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-sm btn-rewaq-primary rounded-pill px-4"
+                [disabled]="actionLoadingId() === loan._id"
+                (click)="returnBook(loan)"
+                title="Return book to library"
+              >
+                <span *ngIf="actionLoadingId() === loan._id" class="spinner-border spinner-border-sm me-1"></span>
+                <i *ngIf="actionLoadingId() !== loan._id" class="bi bi-arrow-return-left me-1"></i>
+                <span>Return Book</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================
+       MODALS: ADD BOOK, EDIT BOOK, ADD USER, EDIT USER
+       ======================================================== -->
+
+  <!-- Modal: Add New Book -->
+  <div class="rewaq-modal-backdrop" *ngIf="showAddBookModal()">
+    <div class="rewaq-modal-content">
+      <div class="rewaq-modal-header">
+        <h5 class="fw-bold text-dark mb-0">Add New Book to Collection</h5>
+        <button type="button" class="btn-close" (click)="closeAddBookModal()"></button>
+      </div>
+      <form [formGroup]="addBookForm" (ngSubmit)="submitAddBook()">
+        <div class="rewaq-modal-body">
+          <div class="mb-3">
+            <label class="form-label small fw-semibold text-muted">Book Title *</label>
+            <input type="text" formControlName="title" class="form-control" placeholder="e.g. The Architecture of Happiness" />
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-7">
+              <label class="form-label small fw-semibold text-muted">Author *</label>
+              <input type="text" formControlName="author" class="form-control" placeholder="e.g. Alain de Botton" />
+            </div>
+            <div class="col-5">
+              <label class="form-label small fw-semibold text-muted">Pages *</label>
+              <input type="number" formControlName="pages" class="form-control" min="1" />
+            </div>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-semibold text-muted">Category</label>
+              <input type="text" formControlName="category" class="form-control" placeholder="e.g. ARCHITECTURE & DESIGN" />
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-semibold text-muted">Published Year</label>
+              <input type="number" formControlName="publishedYear" class="form-control" placeholder="2023" />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold text-muted">ISBN</label>
+            <input type="text" formControlName="isbn" class="form-control" placeholder="e.g. 978-1-234" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold text-muted">Synopsis (Overview)</label>
+            <textarea formControlName="synopsis" rows="3" class="form-control" placeholder="Detailed description of the book..."></textarea>
+          </div>
+          <div class="mb-2">
+            <label class="form-label small fw-semibold text-muted">Cover Image (Optional)</label>
+            <input type="file" class="form-control" accept="image/*" (change)="onAddBookFile($event)" />
+            <div *ngIf="addBookPreview" class="mt-2 text-center">
+              <img [src]="addBookPreview" alt="Preview" style="max-height: 100px; border-radius: 0.5rem" class="border shadow-sm" />
+            </div>
+          </div>
+        </div>
+        <div class="rewaq-modal-footer">
+          <button type="button" class="btn btn-sm btn-rewaq-white" (click)="closeAddBookModal()">Cancel</button>
+          <button type="submit" class="btn btn-sm btn-rewaq-primary">Add Book</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Edit Book -->
+  <div class="rewaq-modal-backdrop" *ngIf="showEditBookModal()">
+    <div class="rewaq-modal-content">
+      <div class="rewaq-modal-header">
+        <h5 class="fw-bold text-dark mb-0">Edit Book Details</h5>
+        <button type="button" class="btn-close" (click)="closeEditBookModal()"></button>
+      </div>
+      <form [formGroup]="editBookForm" (ngSubmit)="submitEditBook()">
+        <div class="rewaq-modal-body">
+          <div class="mb-3">
+            <label class="form-label small fw-semibold text-muted">Book Title *</label>
+            <input type="text" formControlName="title" class="form-control" />
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-7">
+              <label class="form-label small fw-semibold text-muted">Author *</label>
+              <input type="text" formControlName="author" class="form-control" />
+            </div>
+            <div class="col-5">
+              <label class="form-label small fw-semibold text-muted">Pages *</label>
+              <input type="number" formControlName="pages" class="form-control" min="1" />
+            </div>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-semibold text-muted">Category</label>
+              <input type="text" formControlName="category" class="form-control" />
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-semibold text-muted">Published Year</label>
+              <input type="number" formControlName="publishedYear" class="form-control" />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold text-muted">ISBN</label>
+            <input type="text" formControlName="isbn" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold text-muted">Status</label>
+            <select formControlName="available" class="form-select">
+              <option [ngValue]="true">Available for Loan</option>
+              <option [ngValue]="false">Borrowed / Checked Out</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold text-muted">Synopsis (Overview)</label>
+            <textarea formControlName="synopsis" rows="3" class="form-control"></textarea>
+          </div>
+          <div class="mb-2">
+            <label class="form-label small fw-semibold text-muted">Update Cover Image</label>
+            <input type="file" class="form-control" accept="image/*" (change)="onEditBookFile($event)" />
+          </div>
+        </div>
+        <div class="rewaq-modal-footer">
+          <button type="button" class="btn btn-sm btn-rewaq-white" (click)="closeEditBookModal()">Cancel</button>
+          <button type="submit" class="btn btn-sm btn-rewaq-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add New User -->
+  <div class="rewaq-modal-backdrop" *ngIf="showAddUserModal()">
+    <div class="rewaq-modal-content">
+      <div class="rewaq-modal-header">
+        <h5 class="fw-bold text-dark mb-0">Add New User Account</h5>
+        <button type="button" class="btn-close" (click)="closeAddUserModal()"></button>
+      </div>
+      <form [formGroup]="addUserForm" (ngSubmit)="submitAddUser()">
+        <div class="rewaq-modal-body">
+          <div class="mb-3">
+            <label class="form-label small fw-semibold text-muted">Full Name *</label>
+            <input type="text" formControlName="name" class="form-control" placeholder="e.g. Dr. Emily Chen" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold text-muted">Email Address *</label>
+            <input type="email" formControlName="email" class="form-control" placeholder="e.g. echen@university.edu" />
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-7">
+              <label class="form-label small fw-semibold text-muted">Phone Number *</label>
+              <input type="tel" formControlName="phone" class="form-control" placeholder="e.g. 01012345678" />
+            </div>
+            <div class="col-5">
+              <label class="form-label small fw-semibold text-muted">Role *</label>
+              <select formControlName="role" class="form-select">
+                <option value="user">Patron (User)</option>
+                <option value="admin">Administrator</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-2">
+            <label class="form-label small fw-semibold text-muted">Password *</label>
+            <input type="password" formControlName="password" class="form-control" placeholder="Minimum 6 characters" />
+          </div>
+        </div>
+        <div class="rewaq-modal-footer">
+          <button type="button" class="btn btn-sm btn-rewaq-white" (click)="closeAddUserModal()">Cancel</button>
+          <button type="submit" class="btn btn-sm btn-rewaq-primary">Create User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Edit User -->
+  <div class="rewaq-modal-backdrop" *ngIf="showEditUserModal()">
+    <div class="rewaq-modal-content">
+      <div class="rewaq-modal-header">
+        <h5 class="fw-bold text-dark mb-0">Edit User Account</h5>
+        <button type="button" class="btn-close" (click)="closeEditUserModal()"></button>
+      </div>
+      <form [formGroup]="editUserForm" (ngSubmit)="submitEditUser()">
+        <div class="rewaq-modal-body">
+          <div class="mb-3">
+            <label class="form-label small fw-semibold text-muted">Full Name *</label>
+            <input type="text" formControlName="name" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold text-muted">Email Address *</label>
+            <input type="email" formControlName="email" class="form-control" />
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-7">
+              <label class="form-label small fw-semibold text-muted">Phone Number *</label>
+              <input type="tel" formControlName="phone" class="form-control" />
+            </div>
+            <div class="col-5">
+              <label class="form-label small fw-semibold text-muted">Role *</label>
+              <select formControlName="role" class="form-select">
+                <option value="user">Patron (User)</option>
+                <option value="admin">Administrator</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-2">
+            <label class="form-label small fw-semibold text-muted">New Password (leave empty to keep current)</label>
+            <input type="password" formControlName="password" class="form-control" placeholder="Optional" />
+          </div>
+        </div>
+        <div class="rewaq-modal-footer">
+          <button type="button" class="btn btn-sm btn-rewaq-white" (click)="closeEditUserModal()">Cancel</button>
+          <button type="submit" class="btn btn-sm btn-rewaq-primary">Update User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       EDIT MY PROFILE MODAL
+       ======================================================== -->
+  <div class="rewaq-modal-backdrop" *ngIf="showProfileModal()">
+    <div class="rewaq-modal-content">
+      <div class="rewaq-modal-header">
+        <h5 class="fw-bold text-dark mb-0">Edit My Profile</h5>
+        <button type="button" class="btn-close" (click)="closeProfileModal()"></button>
+      </div>
+
+      <form [formGroup]="profileForm" (ngSubmit)="submitProfile()">
+        <div class="rewaq-modal-body">
+          <div *ngIf="isLoadingProfile()" class="text-center py-4">
+            <div class="spinner-border spinner-border-sm text-secondary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+
+          <div *ngIf="!isLoadingProfile()">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <div class="user-avatar-placeholder">
+                {{ getUserInitials(authService.currentUser()?.name) }}
+              </div>
+              <div>
+                <div class="fw-bold text-dark">{{ authService.currentUser()?.name }}</div>
+                <div class="text-muted" style="font-size: 0.78rem">
+                  {{ authService.isAdmin() ? 'Administrator' : 'Patron' }}
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-semibold text-muted">Full Name *</label>
+              <input type="text" formControlName="name" class="form-control" />
+              <div
+                *ngIf="profileForm.get('name')?.touched && profileForm.get('name')?.invalid"
+                class="text-danger mt-1"
+                style="font-size: 0.78rem"
+              >
+                Please enter at least 3 characters.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-semibold text-muted">Email Address *</label>
+              <input type="email" formControlName="email" class="form-control" />
+              <div
+                *ngIf="profileForm.get('email')?.touched && profileForm.get('email')?.invalid"
+                class="text-danger mt-1"
+                style="font-size: 0.78rem"
+              >
+                Please enter a valid email address.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-semibold text-muted">Phone Number *</label>
+              <input type="tel" formControlName="phone" class="form-control" />
+              <div
+                *ngIf="profileForm.get('phone')?.touched && profileForm.get('phone')?.invalid"
+                class="text-danger mt-1"
+                style="font-size: 0.78rem"
+              >
+                Please enter a valid phone number.
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label small fw-semibold text-muted">
+                New Password (leave empty to keep current)
+              </label>
+              <input
+                type="password"
+                formControlName="password"
+                class="form-control"
+                placeholder="Optional"
+              />
+              <div
+                *ngIf="profileForm.get('password')?.touched && profileForm.get('password')?.invalid"
+                class="text-danger mt-1"
+                style="font-size: 0.78rem"
+              >
+                Password must be at least 6 characters.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rewaq-modal-footer">
+          <button
+            type="button"
+            class="btn btn-sm btn-link text-danger text-decoration-none p-0 me-auto"
+            (click)="deleteMyAccount()"
+            [disabled]="isSavingProfile() || isLoadingProfile()"
+          >
+            Delete my account
+          </button>
+
+          <button type="button" class="btn btn-sm btn-rewaq-white" (click)="closeProfileModal()">
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-sm btn-rewaq-primary"
+            [disabled]="isSavingProfile() || isLoadingProfile()"
+          >
+            <span
+              *ngIf="isSavingProfile()"
+              class="spinner-border spinner-border-sm me-2"
+            ></span>
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       FOOTER (Matches Mockup Images 1 & 2)
+       ======================================================== -->
+  <footer class="rewaq-footer">
+    <div class="container d-flex align-items-center justify-content-center gap-2">
+      <img src="/logo.png" alt="Rewaq" width="22" height="22" />
+      <span class="fw-bold text-dark" style="font-family: 'Merriweather', serif">Rewaq</span>
+      <span class="text-muted ms-2">© {{ currentYear }} Rewaq Knowledge Sanctuary. All rights reserved.</span>
+    </div>
+  </footer>
+</div>
